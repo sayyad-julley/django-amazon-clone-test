@@ -13,7 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 @login_required(login_url="/admin/")
 def admin_home(request):
-    return render(request,"admin_templates/home.html")
+    total_products = Products.objects.count()
+    context = {'total_products': total_products}
+    return render(request,"admin_templates/home.html", context)
 
 class CategoriesListView(ListView):
     model=Categories
@@ -183,7 +185,7 @@ class MerchantUserUpdateView(SuccessMessageMixin,UpdateView):
         messages.success(self.request,"Merchant User Updated")
         return HttpResponseRedirect(reverse("merchant_list"))
 
-        
+
 
 class ProductView(View):
     def get(self,request,*args,**kwargs):
@@ -228,7 +230,7 @@ class ProductView(View):
             product_media=ProductMedia(product_id=product,media_type=media_type_list[i],media_content=media_url)
             product_media.save()
             i=i+1
-        
+
         j=0
         for title_title in title_title_list:
             product_details=ProductDetails(title=title_title,title_details=title_details_list[j],product_id=product)
@@ -238,13 +240,13 @@ class ProductView(View):
         for about in about_title_list:
             product_about=ProductAbout(title=about,product_id=product)
             product_about.save()
-        
+
         product_tags_list=product_tags.split(",")
 
         for product_tag in product_tags_list:
             product_tag_obj=ProductTags(product_id=product,title=product_tag)
             product_tag_obj.save()
-        
+
         product_transaction=ProductTransaction(product_id=product,transaction_type=1,transaction_product_count=in_stock_total,transaction_description="Intially Item Added in Stocks")
         product_transaction.save()
         return HttpResponse("OK")
@@ -270,7 +272,7 @@ class ProductListView(ListView):
             products=Products.objects.filter(Q(product_name__contains=filter_val) | Q(product_description__contains=filter_val)).order_by(order_by)
         else:
             products=Products.objects.all().order_by(order_by)
-        
+
         product_list=[]
         for product in products:
             product_media=ProductMedia.objects.filter(product_id=product.id,media_type=1,is_active=1).first()
@@ -304,7 +306,7 @@ class ProductEdit(View):
         return render(request,"admin_templates/product_edit.html",{"categories":categories_list,"product":product,"product_details":product_details,"product_about":product_about,"product_tags":product_tags})
 
     def post(self,request,*args,**kwargs):
-        
+
         product_name=request.POST.get("product_name")
         brand=request.POST.get("brand")
         url_slug=request.POST.get("url_slug")
@@ -333,15 +335,15 @@ class ProductEdit(View):
         product.product_long_description=long_desc
         product.save()
 
-        
+
         j=0
         for title_title in title_title_list:
             detail_id=details_ids[j]
             if detail_id == "blank" and title_title!="":
                 product_details=ProductDetails(title=title_title,title_details=title_details_list[j],product_id=product)
                 product_details.save()
-            else: 
-                if title_title!="":               
+            else:
+                if title_title!="":
                     product_details=ProductDetails.objects.get(id=detail_id)
                     product_details.title=title_title
                     product_details.title_details=title_details_list[j]
@@ -363,7 +365,7 @@ class ProductEdit(View):
                     product_about.product_id=product
                     product_about.save()
             k=k+1
-        
+
         ProductTags.objects.filter(product_id=product_id).delete()
 
         product_tags_list=product_tags.split(",")
@@ -371,7 +373,7 @@ class ProductEdit(View):
         for product_tag in product_tags_list:
             product_tag_obj=ProductTags(product_id=product,title=product_tag)
             product_tag_obj.save()
-        
+
         return HttpResponse("OK")
 
 class ProductAddMedia(View):
@@ -385,7 +387,7 @@ class ProductAddMedia(View):
         product=Products.objects.get(id=product_id)
         media_type_list=request.POST.getlist("media_type[]")
         media_content_list=request.FILES.getlist("media_content[]")
-        
+
         i=0
         for media_content in media_content_list:
             fs=FileSystemStorage()
@@ -394,7 +396,7 @@ class ProductAddMedia(View):
             product_media=ProductMedia(product_id=product,media_type=media_type_list[i],media_content=media_url)
             product_media.save()
             i=i+1
-        
+
         return HttpResponse("OK")
 
 class ProductEditMedia(View):
@@ -414,7 +416,7 @@ class ProductMediaDelete(View):
         #It will work too Sometimes
         #product_media.media_content.delete()
         os.remove(settings.MEDIA_ROOT.replace("\media","")+str(product_media.media_content).replace("/","\\"))
-        
+
         product_id=product_media.product_id.id
         product_media.delete()
         return HttpResponseRedirect(reverse("product_edit_media",kwargs={"product_id":product_id}))

@@ -1,0 +1,57 @@
+---
+title: 'Admin Dashboard'
+description: 'Admin dashboard home page features and functionality'
+---
+
+# Admin Dashboard
+
+The admin dashboard provides a centralized view for administrators to monitor the e-commerce platform.
+
+## Dashboard Home Page
+
+The admin dashboard home page (`/admin_home/`) displays key statistics about the platform.
+
+### Features
+
+#### Total Products Count
+
+The dashboard displays the total number of products in the system.
+
+**Implementation Details:**
+
+- **View:** `admin_home` function in `DjangoEcommerceApp/AdminViews.py`
+- **Template:** `DjangoEcommerceApp/templates/admin_templates/home.html`
+
+**Usage:**
+
+When an admin user logs in and navigates to the admin home page, they will see:
+
+```
+Total Products: [count]
+```
+
+Where `[count]` is the current number of products in the database.
+
+**Technical Implementation:**
+
+```python
+@login_required(login_url="/admin/")
+def admin_home(request):
+    total_products = Products.objects.count()
+    context = {'total_products': total_products}
+    return render(request, "admin_templates/home.html", context)
+```
+
+### Dynamic Updates
+
+The product count updates automatically whenever:
+- A new product is added to the system
+- A product is removed from the system
+
+No page refresh is required beyond the initial load to see the current count.
+
+## Related Features
+
+- [Product Management](/admin/products)
+- [Category Management](/admin/categories)
+- [Merchant Management](/admin/merchants)
