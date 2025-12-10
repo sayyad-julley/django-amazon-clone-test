@@ -195,7 +195,12 @@ Product Create
                     <br>
 
                     <div class="row">
-                        <button type="button" class="btn btn-primary btn-block submit_btn">ADD PRODUCTS</button>
+                        <div class="col-lg-6">
+                            <a href="{% url 'product_list' %}" class="btn btn-secondary btn-block">&larr; Back to Product List</a>
+                        </div>
+                        <div class="col-lg-6">
+                            <button type="button" class="btn btn-primary btn-block submit_btn">ADD PRODUCTS</button>
+                        </div>
                     </div>
 
                  </div>

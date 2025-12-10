@@ -1,0 +1,53 @@
+---
+title: 'Product Management'
+description: 'Admin interface for managing products in the Django E-commerce Application'
+---
+
+## Overview
+
+The Product Management section in the admin panel provides functionality for creating, editing, and managing products in your e-commerce store.
+
+## Product Create Page
+
+The product create page (`/admin/product/create/`) allows administrators to add new products to the catalog.
+
+### Features
+
+- **Product Basic Details**: Name, brand, URL slug, category selection
+- **Pricing**: Max price and discount price fields
+- **Descriptions**: Short and long product descriptions with rich text editor
+- **Media Management**: Add product images and videos
+- **Product Details**: Add custom detail fields (title/value pairs)
+- **About Section**: Add bullet points describing the product
+- **Tags**: Tag products for search and filtering
+- **Navigation**: "Back to Product List" button for easy navigation
+
+### Navigation
+
+Use the **"← Back to Product List"** button located at the bottom of the form to return to the product listing page without saving changes.
+
+## Product Edit Page
+
+The product edit page (`/admin/product/edit/<id>/`) allows administrators to modify existing products.
+
+### Features
+
+- All features available in the product create page
+- Pre-populated fields with existing product data
+- **Navigation**: "Back to Product List" button for easy navigation
+
+### Navigation
+
+Use the **"← Back to Product List"** button located at the bottom of the form to return to the product listing page.
+
+## Recent Changes
+
+### AGENTIC-114: Added Back to Product List Navigation
+
+A "Back to Product List" button has been added to both the product create and edit pages to improve navigation:
+
+- **Location**: Bottom of the form, next to the submit button
+- **Styling**: Secondary button style (`btn-secondary`)
+- **Behavior**: Navigates to the product list page using Django's URL routing
+
+This enhancement improves the user experience by providing a clear path back to the product list without requiring browser navigation.
