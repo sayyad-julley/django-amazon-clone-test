@@ -19,7 +19,8 @@ Category List
                   
                   <div class="card-body">
                   <form method="get">
-                    <button class="btn  btn-primary" type="submit" style="float:right"><i class="fas fa-search"></i> Search</button>
+                    <a href="{% url 'category_list' %}" class="btn btn-secondary btn-sm" style="float:right;margin-right:10px;">Clear</a>
+                    <button class="btn btn-primary" type="submit" style="float:right"><i class="fas fa-search"></i> Search</button>
                     <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="250" style="width: 250px;float:right" name="filter" value="{{ filter }}">
                    </form>
                   </div>

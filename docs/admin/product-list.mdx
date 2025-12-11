@@ -1,50 +1,31 @@
----
-title: "Product List Admin Page"
-description: "Admin product list displaying all products with creation dates"
----
+# Product List Admin View
 
-# Product List Admin Page
+## Status Badge Feature
 
-The Product List page in the admin panel provides a comprehensive view of all products in the system.
+The product list now includes a Status column that displays the active/inactive state of each product.
 
-## Features
+### Status Badge Representation
 
-### Product Display
-Each product card displays:
-- **Product Name**: Shown in a badge at the top
-- **Subcategory**: The category the product belongs to
-- **URL Slug**: The unique URL identifier for the product
-- **Created At**: The date and time when the product was created (formatted as YYYY-MM-DD HH:MM)
-- **Active Status**: Toggle showing whether the product is active
+- **Active Products**: Green badge with "Active" text
+- **Inactive Products**: Grey badge with "Inactive" text
 
-### Sorting Options
-Products can be sorted by:
-- **ID**: Sort by product ID
-- **Title**: Sort alphabetically by product name
-- **Description**: Sort by product description
-- **Created At**: Sort by creation date (newest or oldest)
+### Implementation Details
 
-### Search
-Use the search bar to filter products by name or other attributes.
+- Located in: `DjangoEcommerceApp/templates/admin_templates/product_list.html`
+- Uses Bootstrap badge classes for styling
+- Conditional rendering based on `is_active` field
 
-### Actions
-Each product card provides quick actions:
-- **Edit**: Modify product details
-- **Add Media**: Upload new media for the product
-- **Edit Media**: Modify existing product media
-- **Add Stocks**: Update product inventory
+### Example
 
-## Usage Example
+```html
+{% if product.product.is_active == 1 %}
+    <span class="badge badge-success">Active</span>
+{% else %}
+    <span class="badge badge-secondary">Inactive</span>
+{% endif %}
+```
 
-To access the product list:
-1. Navigate to the admin panel
-2. Click on "Product List" in the navigation menu
-3. Use the "Sort By" links to organize products
-4. Use the search bar to find specific products
+### Changelog
 
-## Recent Changes
-
-### AGENTIC-113: Display Product Creation Date
-- Added "Created At" sorting option in the Sort By section
-- Creation date is displayed for each product in a blue badge
-- Date format: YYYY-MM-DD HH:MM
+- Added Status column to product list table
+- Implemented visual distinction for active/inactive products

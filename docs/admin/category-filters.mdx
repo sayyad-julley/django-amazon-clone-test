@@ -1,0 +1,26 @@
+# Category and Subcategory List Filters
+
+## Clear Filter Functionality
+
+In both the Category and Subcategory list pages, a "Clear" button has been added next to the search input field. 
+
+### Features
+- Instantly clears all applied filters
+- Resets the page to show all items
+- Located next to the search input for easy access
+
+### Usage
+To clear filters, simply click the "Clear" button (with a times/close icon) next to the search input. This will reset the page to its default state, showing all items.
+
+### Implementation Details
+- Button URL: Redirects to the base list page (e.g., `category_list` or `sub_category_list`)
+- Removes all filter parameters
+- Restores the full list of categories or subcategories
+
+### Example
+```html
+<!-- Clear button in search form -->
+<a href="{% url 'category_list' %}" class="btn btn-secondary">
+  <i class="fas fa-times"></i> Clear
+</a>
+```

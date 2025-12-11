@@ -1,0 +1,33 @@
+# Clear Filter Button in Category and Subcategory Lists
+
+## Overview
+The application provides a "Clear" button in both Category and Subcategory list pages to quickly reset applied filters.
+
+## Feature Details
+- Located next to the search input field in both Category and Subcategory list pages
+- Clears the current filter and resets the view to show all items
+- Implemented using a simple link back to the list page without filter parameters
+
+## Usage
+When viewing the Category or Subcategory list, click the "Clear" button to:
+- Remove any active search filters
+- Reset the list to display all items
+- Return to the default view
+
+## Technical Implementation
+- Uses Django's URL routing to redirect to the list page without filter parameters
+- Preserves pagination and sorting functionality
+- Instant reset without page reload
+
+## Example
+```html
+<a href="{% url 'category_list' %}" class="btn btn-secondary">
+    <i class="fas fa-times"></i> Clear
+</a>
+```
+
+## Acceptance Criteria
+- ✓ "Clear" button appears in category list page
+- ✓ "Clear" button appears in subcategory list page
+- ✓ Button clears the filter and shows all items
+- ✓ No breaking changes introduced
