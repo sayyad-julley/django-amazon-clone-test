@@ -1,7 +1,8 @@
 from django.test import TestCase, RequestFactory
 from django.core.cache import cache
 from unittest.mock import patch
-from .utils.rate_limiter import enhanced_rate_limit, get_client_ip, RateLimiterException
+from ..utils.rate_limiter import enhanced_rate_limit, get_client_ip, RateLimiterException
+from django.urls import reverse
 import time
 
 class RateLimiterTestCase(TestCase):

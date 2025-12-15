@@ -1,0 +1,34 @@
+# Authentication API Rate Limiting
+
+## Overview
+The authentication API endpoints implement rate limiting to prevent abuse and protect against brute-force attacks.
+
+## Rate Limit Policy
+- **Endpoints**: Registration and Login
+- **Limit**: 5 requests per minute per IP address
+- **Mechanism**: Sliding window rate limiting
+- **Behavior**: Progressive delay for repeated violations
+
+## Rate Limit Headers
+When a rate limit is exceeded, the API returns:
+- `429 Too Many Requests` status code
+- `Retry-After`: Seconds to wait before next request
+- `X-RateLimit-Limit`: Maximum allowed requests
+- `X-RateLimit-Remaining`: Remaining requests in current window
+
+### Example Rate Limit Response
+```json
+{
+  "error": "Authentication API rate limit exceeded. Please wait and retry."
+}
+```
+
+## Best Practices
+- Implement client-side backoff strategies
+- Cache credentials to minimize repeated login attempts
+- Use secure, memorable passwords to reduce login failures
+
+## Implementation Details
+- Uses Django's cache framework for distributed rate limiting
+- IP-based tracking with multiple header support
+- Progressive delay to deter repeated abuse

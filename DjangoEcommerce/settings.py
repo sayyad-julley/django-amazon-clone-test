@@ -121,6 +121,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Caching configuration for rate limiting
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
 AUTH_USER_MODEL="DjangoEcommerceApp.CustomUser"
 
 MEDIA_URL="/media/"

@@ -1,0 +1,60 @@
+---
+title: 'API Rate Limiting'
+description: 'Implementation of rate limiting for authentication endpoints'
+---
+
+# API Rate Limiting
+
+## Overview
+
+Our Django application implements a robust rate limiting mechanism to protect authentication endpoints from abuse and potential brute-force attacks.
+
+## Rate Limit Strategies
+
+### Authentication Endpoints
+- **Limit**: 5 requests per minute
+- **Behavior**: Progressive delay with exponential backoff
+- **Endpoints**:
+  - Login
+  - Registration (when implemented)
+
+### Profile and Logout Endpoints
+- **Limit**: 10 requests per minute
+- **Behavior**: Static rate limit
+
+## How It Works
+
+### IP-Based Tracking
+Rate limiting is implemented on a per-IP basis, with multiple methods to detect the client's IP address:
+1. X-Forwarded-For header
+2. REMOTE_ADDR 
+
+### Progressive Delay Mechanism
+When rate limits are exceeded:
+- First violation: Block for the remainder of the current minute
+- Subsequent violations: Exponential delay (2^n seconds, capped at 1 hour)
+
+## Response Headers
+
+When a rate limit is exceeded, the API returns:
+- **HTTP Status**: 403 Forbidden
+- **Retry-After**: Suggested wait time before next request
+- **X-RateLimit-Limit**: Maximum number of allowed requests
+- **X-RateLimit-Remaining**: Remaining requests in the current window
+
+## Example Rate Limiting Decorator
+
+```python
+@strict_auth_rate_limit
+def adminLoginProcess(request):
+    # Login logic here
+    pass
+```
+
+## Security Considerations
+- Protects against brute-force attacks
+- Provides gradual escalation of blocking mechanisms
+- Tracks violations across different endpoints
+
+## Customization
+Rate limits can be easily adjusted in `DjangoEcommerceApp/utils/rate_limiter.py`.
