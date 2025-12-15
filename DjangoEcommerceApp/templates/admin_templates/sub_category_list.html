@@ -3,9 +3,7 @@
 Sub Category List
 {% endblock title %}
 
-
-{% block custom_css %}
-{% endblock custom_css %}
+{% block custom_css %}{% endblock custom_css %}
 
 {% block page_title %}
 Sub Category List <small>(Total: {{ subcategories_list|length }})</small>
@@ -16,15 +14,16 @@ Sub Category List <small>(Total: {{ subcategories_list|length }})</small>
     <div class="col-lg-12">
         <div class="search-element">
         <div class="card">
-                  
+
                   <div class="card-body">
+
                   <form method="get">
                     <a href="{% url 'sub_category_list' %}" class="btn btn-secondary btn-sm" style="float:right;margin-right:10px;">Clear</a>
                     <button class="btn btn-primary" type="submit" style="float:right"><i class="fas fa-search"></i> Search</button>
                     <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="250" style="width: 250px;float:right" name="filter" value="{{ filter }}">
                    </form>
                   </div>
-                  
+
                 </div>
         </div>
     </div>
@@ -33,12 +32,12 @@ Sub Category List <small>(Total: {{ subcategories_list|length }})</small>
     <div class="col-lg-12">
         <div class="search-element">
         <div class="card">
-                  
+
             <div class="card-body">
                 <b>Sort By : - </b>
-                <a href="{% url 'sub_category_list' %}?filter={{ filter }}&orderby=id">ID</a>  | 
-                <a href="{% url 'sub_category_list' %}?filter={{ filter }}&orderby=title">Title</a> |  
-                <a href="{% url 'sub_category_list' %}?filter={{ filter }}&orderby=description">Description</a> 
+                <a href="{% url 'sub_category_list' %}?filter={{ filter }}&orderby=id">ID</a>  |
+                <a href="{% url 'sub_category_list' %}?filter={{ filter }}&orderby=title">Title</a> |
+                <a href="{% url 'sub_category_list' %}?filter={{ filter }}&orderby=description">Description</a>
             </div>
         </div>
         </div>
@@ -75,7 +74,7 @@ Sub Category List <small>(Total: {{ subcategories_list|length }})</small>
 <div class="row">
 <div class="col-lg-12">
 <div class="card">
-                 
+
                   <div class="card-body">
                     <nav aria-label="Page navigation example">
                       <ul class="pagination">
@@ -99,9 +98,6 @@ Sub Category List <small>(Total: {{ subcategories_list|length }})</small>
                 </div>
                 </div>
 </div>
-
 {% endblock page_content %}
 
-
-{% block custom_js %}
-{% endblock custom_js %}
+{% block custom_js %}{% endblock custom_js %}

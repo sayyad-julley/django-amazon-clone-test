@@ -1,55 +1,29 @@
-# Product Management
+---
+title: 'Product Management: Status Badge'
+description: 'How product status is displayed in the admin product list'
+---
 
-The product management section allows administrators to manage products in the e-commerce platform.
+## Product Status Badge
 
-## Product List View
+In the admin product list, each product now displays a status badge indicating whether it is Active or Inactive.
 
-The product list view displays all products in a card-based layout with the following features:
+### Badge Types
+- **Active Badge**: Green badge displaying "Active"
+  - Appears when `is_active` is set to 1
+- **Inactive Badge**: Grey badge displaying "Inactive"
+  - Appears when `is_active` is set to 0
 
-### Search and Filter
-- **Search**: Use the search box to filter products by name
-- **Sort Options**: Sort products by ID, Title, Description, or Created At date
+### Implementation Details
+The status badge is added to the product card in the admin product list template, providing a quick visual indicator of the product's current status.
 
-### Empty State Handling
+Example:
+```html
+{% if product.product.is_active == 1 %}
+    <span class="badge badge-success">Active</span>
+{% else %}
+    <span class="badge badge-secondary">Inactive</span>
+{% endif %}
+```
 
-When no products exist in the system, users are presented with a helpful empty state message:
-
-> **No products found.** [Create your first product!](#)
-
-This user-friendly message:
-- Clearly indicates that the product list is empty
-- Provides a direct link to the product creation page
-- Improves the user experience for new stores or filtered searches with no results
-
-### Product Cards
-
-Each product card displays:
-- Product image
-- Product name
-- Subcategory badge
-- URL slug
-- Creation date and time
-- Active status toggle
-- Action buttons:
-  - **Edit**: Modify product details
-  - **Add Media**: Upload product images
-  - **Edit Media**: Manage existing media
-  - **Add Stocks**: Manage inventory
-
-### Pagination
-
-The product list supports pagination for better performance with large catalogs.
-
-## Creating Products
-
-Navigate to the product creation page using:
-- The "Create your first product!" link (when list is empty)
-- The product creation menu item
-- The "Back to Product List" button to return after creation
-
-## Best Practices
-
-1. **Add descriptive product names**: Clear names help with search and SEO
-2. **Include product images**: Visual content improves conversion rates
-3. **Manage stock levels**: Keep inventory updated to avoid overselling
-4. **Use meaningful URL slugs**: Custom slugs improve SEO
+### Usage
+The status badge is automatically generated based on the `is_active` field in the product model.

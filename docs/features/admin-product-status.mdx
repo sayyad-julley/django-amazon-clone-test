@@ -1,0 +1,36 @@
+---
+title: "Product Status Badges in Admin Product List"
+description: "Implementation of active/inactive status badges for products in the admin interface"
+---
+
+## Overview
+The admin product list includes a status badge for each product, visually indicating its active or inactive state.
+
+## Implementation Details
+- Badge Style: Bootstrap badge classes
+- Active Products: Green `badge-success`
+- Inactive Products: Grey `badge-secondary`
+
+### Code Example
+```html
+{% if product.is_active == 1 %}
+    <span class="badge badge-success">Active</span>
+{% else %}
+    <span class="badge badge-secondary">Inactive</span>
+{% endif %}
+```
+
+## Functionality
+- Products with `is_active == 1` display a green "Active" badge
+- Products with `is_active != 1` display a grey "Inactive" badge
+- Badge is displayed in the product card's details section
+
+## Acceptance Criteria
+✓ Status column appears in product list
+✓ Active products show green "Active" badge
+✓ Inactive products show grey "Inactive" badge
+✓ Badges are visually distinct
+✓ No breaking changes
+
+## Location
+`DjangoEcommerceApp/templates/admin_templates/product_list.html`

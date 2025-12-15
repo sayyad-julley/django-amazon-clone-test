@@ -1,0 +1,25 @@
+---
+title: 'Admin List Filtering'
+description: 'Clear Filter Functionality in Admin List Pages'
+---
+
+## Category and Subcategory List Filtering
+
+### Clear Filter Button
+
+In the admin list pages for categories and subcategories, a "Clear" button is available next to the search input field.
+
+#### Functionality
+- Clicking the "Clear" button removes any active filters
+- Resets the page to show all items
+- Navigates back to the original list view without any filter parameters
+
+#### Usage Example
+1. Apply a filter by entering text in the search input
+2. Click the "Clear" button to reset the view
+3. All items will be displayed again
+
+### Technical Implementation
+- Located in `admin_templates/category_list.html` and `admin_templates/sub_category_list.html`
+- Uses Django URL routing to reset the view
+- Implemented with a simple anchor tag linking to the base list URL

@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<architecture_plan version="2.0" service="DjangoEcommerce">
+  <metadata>
+    <created_at>2024-12-10</created_at>
+    <updated_at>2025-01-15</updated_at>
+    <architect>ArchGuard Agent</architect>
+    <project_type>E-commerce Platform (Amazon Clone)</project_type>
+    <framework>Django 3.1.7</framework>
+    <database>SQLite (Development) / PostgreSQL (Production)</database>
+    <review_status>NEEDS_ATTENTION</review_status>
+    <architecture_score>62</architecture_score>
+  </metadata>
+
+  <executive_summary>
+    This architecture plan documents the current state and recommended improvements for the Django E-commerce
+    platform (Amazon Clone). The system follows a monolithic Django architecture with server-side rendered
+    templates and a multi-tenant user model supporting Admin, Staff, Merchant, and Customer roles.
+
+    CURRENT STATE ASSESSMENT:
+    - Architecture Score: 62/100 (Needs Attention)
+    - Security: Critical issues requiring immediate remediation
+    - Scalability: Limited by current design but easily improvable
+    - Maintainability: Good Django patterns with room for improvement
+    - Test Coverage: Not implemented (major gap)
+
+    Key architectural decisions focus on improving modularity, security, scalability, and maintainability
+    while preserving the existing Django patterns.
+  </executive_summary>
+
+  <patterns_detected>
+    <pattern name="Monolithic Architecture">Single Django application with all features</pattern>
+    <pattern name="MVC (MTV in Django)">Model-Template-View separation</pattern>
+    <pattern name="Single Table Inheritance">CustomUser with user_type discriminator</pattern>
+    <pattern name="One-to-One Profile Extension">Separate profile models per user type</pattern>
+    <pattern name="Entity-Attribute-Value">Flexible product attributes via related tables</pattern>
+    <pattern name="Event Sourcing (Partial)">ProductTransaction for inventory audit</pattern>
+    <pattern name="Hierarchical Categories">Two-level category structure</pattern>
+    <pattern name="Signal-Based Hooks">Automatic profile creation on user save</pattern>
+  </patterns_detected>
+
+  <components>
+    <component>
+      <name>DjangoEcommerce (Core)</name>
+      <type>Django Project Configuration</type>
+      <responsibilities>
+        - Project settings and configuration
+        - URL routing root
+        - WSGI/ASGI application entry points
+        - Static and media file configuration
+      </responsibilities>
+      <files>
+        <file>DjangoEcommerce/settings.py</file>
+        <file>DjangoEcommerce/urls.py</file>
+        <file>DjangoEcommerce/wsgi.py</file>
+        <file>DjangoEcommerce/asgi.py</file>
+      </files>
+      <coupling_score>0.3</coupling_score>
+      <cohesion_score>0.8</cohesion_score>
+    </component>
+
+    <component>
+      <name>DjangoEcommerceApp</name>
+      <type>Django Application (Monolithic)</type>
+      <responsibilities>
+        - User authentication and authorization (multi-role)
+        - Product catalog management
+        - Category/SubCategory management
+        - Merchant management
+        - Customer management
+        - Order processing
+        - Inventory/Stock management
+        - Product reviews and Q&amp;A
+        - Admin dashboard
+      </responsibilities>
+      <subcomponents>
+        <subcomponent name="User Management">
+          <models>CustomUser, AdminUser, StaffUser, MerchantUser, CustomerUser</models>
+          <pattern>Single Table Inheritance via user_type discriminator</pattern>
+        </subcomponent>
+        <subcomponent name="Product Catalog">
+          <models>Categories, SubCategories, Products, ProductMedia, ProductDetails, ProductAbout, ProductTags</models>
+          <pattern>Hierarchical Category Structure</pattern>
+        </subcomponent>
+        <subcomponent name="Product Engagement">
+          <models>ProductQuestions, ProductReviews, ProductReviewVoting</models>
+          <pattern>User-Generated Content</pattern>
+        </subcomponent>
+        <subcomponent name="Product Variants">
+          <models>ProductVarient, ProductVarientItems</models>
+          <pattern>EAV (Entity-Attribute-Value) for flexible variants</pattern>
+        </subcomponent>
+        <subcomponent name="Orders and Inventory">
+          <models>CustomerOrders, OrderDeliveryStatus, ProductTransaction</models>
+          <pattern>Event Sourcing for inventory transactions</pattern>
+        </subcomponent>
+      </subcomponents>
+      <coupling_score>0.7</coupling_score>
+      <cohesion_score>0.5</cohesion_score>
+      <violations>3</violations>
+    </component>
+
+    <component>
+      <name>Admin Dashboard</name>
+      <type>Server-Side Rendered UI</type>
+      <responsibilities>
+        - Category CRUD operations
+        - Product management interface
+        - User management (Merchant, Staff, Customer)
+        - Stock management
+        - Media upload handling
+      </responsibilities>
+      <technology>Django Templates with Stisla Bootstrap Theme</technology>
+      <files>
+        <file>DjangoEcommerceApp/AdminViews.py</file>
+        <file>DjangoEcommerceApp/adminurls.py</file>
+        <file>DjangoEcommerceApp/templates/admin_templates/</file>
+      </files>
+    </component>
+  </components>
+
+  <layers>
+    <layer name="Presentation Layer">
+      <description>Server-side rendered Django templates with Bootstrap styling</description>
+      <components>
+        <component>Django Template Engine</component>
+        <component>Stisla Bootstrap Admin Theme</component>
+        <component>Static Assets (JS, CSS)</component>
+      </components>
+      <patterns>
+        <pattern>Template Inheritance (base_template.html)</pattern>
+        <pattern>Include Templates (navbar.html, sidebar.html)</pattern>
+      </patterns>
+      <cohesion_score>0.7</cohesion_score>
+      <coupling_score>0.4</coupling_score>
+      <violations>0</violations>
+    </layer>
+
+    <layer name="Application Layer">
+      <description>Django views handling business logic and request processing</description>
+      <components>
+        <component>Function-Based Views (views.py)</component>
+        <component>Class-Based Views (AdminViews.py)</component>
+        <component>URL Routing (urls.py, adminurls.py)</component>
+      </components>
+      <patterns>
+        <pattern>ListView for paginated lists</pattern>
+        <pattern>CreateView/UpdateView for forms</pattern>
+        <pattern>Custom View classes for complex operations</pattern>
+      </patterns>
+      <cohesion_score>0.6</cohesion_score>
+      <coupling_score>0.6</coupling_score>
+      <violations>2</violations>
+    </layer>
+
+    <layer name="Domain Layer">
+      <description>Django models representing business entities</description>
+      <components>
+        <component>Django ORM Models</component>
+        <component>Model Signals for cascading operations</component>
+        <component>Model Managers</component>
+      </components>
+      <patterns>
+        <pattern>AbstractUser extension for CustomUser</pattern>
+        <pattern>OneToOne relationships for user profiles</pattern>
+        <pattern>ForeignKey relationships for entity associations</pattern>
+        <pattern>post_save signals for automatic profile creation</pattern>
+      </patterns>
+      <cohesion_score>0.7</cohesion_score>
+      <coupling_score>0.5</coupling_score>
+      <violations>3</violations>
+    </layer>
+
+    <layer name="Data Layer">
+      <description>Database and file storage</description>
+      <components>
+        <component>SQLite Database (Development)</component>
+        <component>Django FileSystemStorage for media</component>
+        <component>Static File Serving</component>
+      </components>
+      <cohesion_score>0.8</cohesion_score>
+      <coupling_score>0.3</coupling_score>
+      <violations>1</violations>
+    </layer>
+  </layers>
+
+  <data_models>
+    <entity_relationship_summary>
+      The ER diagram shows 20+ entities with the following key relationships:
+
+      1. User Hierarchy: CustomUser (base) -> AdminUser/StaffUser/MerchantUser/CustomerUser (profiles)
+      2. Product Hierarchy: Categories -> SubCategories -> Products
+      3. Product Extensions: Products -> ProductMedia, ProductDetails, ProductAbout, ProductTags
+      4. User Interactions: Products <- ProductReviews <- ProductReviewVoting
+      5. Commerce: Products -> CustomerOrders -> OrderDeliveryStatus
+      6. Inventory: Products -> ProductTransaction (event log)
+    </entity_relationship_summary>
+
+    <model name="CustomUser">
+      <extends>AbstractUser</extends>
+      <fields>
+        <field name="user_type" type="CharField" description="Discriminator: 1=Admin, 2=Staff, 3=Merchant, 4=Customer"/>
+      </fields>
+    </model>
+
+    <model name="Products">
+      <fields>
+        <field name="id" type="AutoField" primary_key="true"/>
+        <field name="url_slug" type="CharField"/>
+        <field name="subcategories_id" type="ForeignKey" to="SubCategories"/>
+        <field name="product_name" type="CharField"/>
+        <field name="brand" type="CharField"/>
+        <field name="product_max_price" type="CharField" issue="Should be DecimalField"/>
+        <field name="product_discount_price" type="CharField" issue="Should be DecimalField"/>
+        <field name="product_description" type="TextField"/>
+        <field name="product_long_description" type="TextField"/>
+        <field name="added_by_merchant" type="ForeignKey" to="MerchantUser"/>
+        <field name="in_stock_total" type="IntegerField"/>
+        <field name="is_active" type="IntegerField" issue="Should be BooleanField"/>
+        <field name="created_at" type="DateTimeField"/>
+      </fields>
+    </model>
+
+    <model name="CustomerOrders">
+      <fields>
+        <field name="id" type="AutoField" primary_key="true"/>
+        <field name="product_id" type="ForeignKey" to="Products"/>
+        <field name="purchase_price" type="CharField"/>
+        <field name="coupon_code" type="CharField"/>
+        <field name="discount_amt" type="CharField"/>
+        <field name="product_status" type="CharField"/>
+        <field name="created_at" type="DateTimeField"/>
+      </fields>
+      <issue severity="high">Missing customer_id field - cannot track which customer placed the order</issue>
+    </model>
+  </data_models>
+
+  <apis>
+    <api_style>Server-Side Rendered (No REST API currently)</api_style>
+
+    <current_endpoints>
+      <endpoint_group name="Authentication">
+        <endpoint method="GET" path="/admindashboard/admin/" view="adminLogin"/>
+        <endpoint method="POST" path="/admindashboard/admin_login_process" view="adminLoginProcess"/>
+        <endpoint method="GET" path="/admindashboard/admin_logout_process" view="adminLogoutProcess"/>
+      </endpoint_group>
+
+      <endpoint_group name="Categories">
+        <endpoint method="GET" path="/admindashboard/category_list" view="CategoriesListView"/>
+        <endpoint method="GET/POST" path="/admindashboard/category_create" view="CategoriesCreate"/>
+        <endpoint method="GET/POST" path="/admindashboard/category_update/{pk}" view="CategoriesUpdate"/>
+      </endpoint_group>
+
+      <endpoint_group name="SubCategories">
+        <endpoint method="GET" path="/admindashboard/sub_category_list" view="SubCategoriesListView"/>
+        <endpoint method="GET/POST" path="/admindashboard/sub_category_create" view="SubCategoriesCreate"/>
+        <endpoint method="GET/POST" path="/admindashboard/sub_category_update/{pk}" view="SubCategoriesUpdate"/>
+      </endpoint_group>
+
+      <endpoint_group name="Products">
+        <endpoint method="GET/POST" path="/admindashboard/product_create" view="ProductView"/>
+        <endpoint method="GET" path="/admindashboard/product_list" view="ProductListView"/>
+        <endpoint method="GET/POST" path="/admindashboard/product_edit/{product_id}" view="ProductEdit"/>
+        <endpoint method="GET/POST" path="/admindashboard/product_add_media/{product_id}" view="ProductAddMedia"/>
+        <endpoint method="GET" path="/admindashboard/product_edit_media/{product_id}" view="ProductEditMedia"/>
+        <endpoint method="GET" path="/admindashboard/product_media_delete/{id}" view="ProductMediaDelete"/>
+        <endpoint method="GET/POST" path="/admindashboard/product_add_stocks/{product_id}" view="ProductAddStocks"/>
+        <endpoint method="POST" path="/admindashboard/file_upload" view="file_upload" security_issue="@csrf_exempt"/>
+      </endpoint_group>
+
+      <endpoint_group name="Users">
+        <endpoint method="GET/POST" path="/admindashboard/merchant_create" view="MerchantUserCreateView"/>
+        <endpoint method="GET" path="/admindashboard/merchant_list" view="MerchantUserListView"/>
+        <endpoint method="GET/POST" path="/admindashboard/merchant_update/{pk}" view="MerchantUserUpdateView"/>
+        <endpoint method="GET/POST" path="/admindashboard/staff_create" view="StaffUserCreateView"/>
+        <endpoint method="GET" path="/admindashboard/staff_list" view="StaffUserListView"/>
+        <endpoint method="GET/POST" path="/admindashboard/staff_update/{pk}" view="StaffUserUpdateView"/>
+        <endpoint method="GET/POST" path="/admindashboard/customer_create" view="CustomerUserCreateView"/>
+        <endpoint method="GET" path="/admindashboard/customer_list" view="CustomerUserListView"/>
+        <endpoint method="GET/POST" path="/admindashboard/customer_update/{pk}" view="CustomerUserUpdateView"/>
+      </endpoint_group>
+    </current_endpoints>
+
+    <recommended_api_evolution>
+      <phase name="Phase 1: REST API Layer">
+        <description>Add Django REST Framework for API endpoints</description>
+        <endpoints>
+          <endpoint>GET/POST /api/v1/products/</endpoint>
+          <endpoint>GET/PUT/DELETE /api/v1/products/{id}/</endpoint>
+          <endpoint>GET/POST /api/v1/categories/</endpoint>
+          <endpoint>GET/POST /api/v1/orders/</endpoint>
+          <endpoint>POST /api/v1/auth/login/</endpoint>
+          <endpoint>POST /api/v1/auth/register/</endpoint>
+        </endpoints>
+      </phase>
+    </recommended_api_evolution>
+  </apis>
+
+  <security>
+    <current_state>
+      <authentication>
+        <method>Django Session-Based Authentication</method>
+        <implementation>django.contrib.auth with CustomUser model</implementation>
+        <decorators>@login_required for protected views</decorators>
+      </authentication>
+
+      <authorization>
+        <method>Role-Based via user_type field</method>
+        <roles>
+          <role id="1" name="Admin">Full system access</role>
+          <role id="2" name="Staff">Limited admin functions</role>
+          <role id="3" name="Merchant">Product and inventory management</role>
+          <role id="4" name="Customer">Shopping and order functions</role>
+        </roles>
+      </authorization>
+
+      <vulnerabilities>
+        <issue id="SEC-001" severity="critical">
+          <description>Hardcoded SECRET_KEY in settings.py</description>
+          <location>DjangoEcommerce/settings.py:24</location>
+          <recommendation>Move to environment variables using python-decouple</recommendation>
+        </issue>
+        <issue id="SEC-002" severity="critical">
+          <description>DEBUG=True in settings</description>
+          <location>DjangoEcommerce/settings.py:27</location>
+          <recommendation>Use environment-based configuration</recommendation>
+        </issue>
+        <issue id="SEC-003" severity="high">
+          <description>@csrf_exempt on file_upload endpoint</description>
+          <location>AdminViews.py:254</location>
+          <recommendation>Remove CSRF exemption, use proper AJAX CSRF token handling</recommendation>
+        </issue>
+        <issue id="SEC-004" severity="medium">
+          <description>Missing role-based access control on views</description>
+          <location>Multiple views in AdminViews.py</location>
+          <recommendation>Add LoginRequiredMixin and UserPassesTestMixin to class-based views</recommendation>
+        </issue>
+        <issue id="SEC-005" severity="medium">
+          <description>No input validation on file uploads</description>
+          <location>AdminViews.py file upload handlers</location>
+          <recommendation>Add file type whitelist, size validation, and malware scanning</recommendation>
+        </issue>
+        <issue id="SEC-006" severity="low">
+          <description>Empty ALLOWED_HOSTS in settings</description>
+          <location>DjangoEcommerce/settings.py:29</location>
+          <recommendation>Configure appropriate hosts for production</recommendation>
+        </issue>
+      </vulnerabilities>
+    </current_state>
+
+    <recommended_improvements>
+      <improvement priority="P0">
+        <title>Environment-Based Configuration</title>
+        <action>Use python-decouple or django-environ for secrets</action>
+        <effort_hours>2</effort_hours>
+      </improvement>
+      <improvement priority="P0">
+        <title>CSRF Protection</title>
+        <action>Remove @csrf_exempt, implement proper AJAX CSRF handling</action>
+        <effort_hours>4</effort_hours>
+      </improvement>
+      <improvement priority="P1">
+        <title>Permission System</title>
+        <action>Implement Django permissions or django-guardian for object-level permissions</action>
+        <effort_hours>16</effort_hours>
+      </improvement>
+      <improvement priority="P1">
+        <title>File Upload Security</title>
+        <action>Add file type whitelist, size limits, and malware scanning</action>
+        <effort_hours>8</effort_hours>
+      </improvement>
+      <improvement priority="P2">
+        <title>Rate Limiting</title>
+        <action>Add django-ratelimit for API protection</action>
+        <effort_hours>4</effort_hours>
+      </improvement>
+    </recommended_improvements>
+  </security>
+
+  <deployment>
+    <current_state>
+      <environment>Development (local)</environment>
+      <server>Django Development Server</server>
+      <database>SQLite</database>
+      <static_files>Django Static File Serving</static_files>
+    </current_state>
+
+    <recommended_production_stack>
+      <web_server>Nginx (reverse proxy)</web_server>
+      <application_server>Gunicorn with Uvicorn workers</application_server>
+      <database>PostgreSQL 14+</database>
+      <cache>Redis</cache>
+      <static_files>WhiteNoise or CDN (CloudFront/CloudFlare)</static_files>
+      <media_files>AWS S3 or equivalent object storage</media_files>
+      <containerization>Docker with docker-compose</containerization>
+      <orchestration>Kubernetes (for scale) or ECS</orchestration>
+    </recommended_production_stack>
+
+    <environment_configuration>
+      <environment name="development">
+        <database>SQLite</database>
+        <debug>True</debug>
+        <static_serving>Django</static_serving>
+      </environment>
+      <environment name="staging">
+        <database>PostgreSQL</database>
+        <debug>False</debug>
+        <static_serving>WhiteNoise</static_serving>
+      </environment>
+      <environment name="production">
+        <database>PostgreSQL (RDS)</database>
+        <debug>False</debug>
+        <static_serving>S3 + CloudFront</static_serving>
+        <scaling>Horizontal with load balancer</scaling>
+      </environment>
+    </environment_configuration>
+  </deployment>
+
+  <scalability>
+    <current_limitations>
+      <limitation>Single SQLite database - no horizontal scaling</limitation>
+      <limitation>File-based media storage on local filesystem</limitation>
+      <limitation>No caching layer</limitation>
+      <limitation>Synchronous request processing only</limitation>
+    </current_limitations>
+
+    <scaling_strategy>
+      <vertical>
+        <action>Upgrade to PostgreSQL for better concurrent connections</action>
+        <action>Add Redis caching for sessions and query results</action>
+      </vertical>
+      <horizontal>
+        <action>Stateless application servers behind load balancer</action>
+        <action>Shared session storage (Redis)</action>
+        <action>Centralized media storage (S3)</action>
+        <action>Database read replicas for heavy read workloads</action>
+      </horizontal>
+      <async_processing>
+        <action>Celery for background tasks (email, image processing)</action>
+        <action>Django Channels for real-time features</action>
+      </async_processing>
+    </scaling_strategy>
+  </scalability>
+
+  <observability>
+    <recommended_stack>
+      <logging>
+        <tool>Django Logging with structured JSON output</tool>
+        <aggregation>ELK Stack or CloudWatch Logs</aggregation>
+      </logging>
+      <metrics>
+        <tool>django-prometheus</tool>
+        <visualization>Grafana</visualization>
+      </metrics>
+      <tracing>
+        <tool>django-opentelemetry</tool>
+        <backend>Jaeger or AWS X-Ray</backend>
+      </tracing>
+      <error_tracking>
+        <tool>Sentry</tool>
+      </error_tracking>
+    </recommended_stack>
+  </observability>
+
+  <technical_debt>
+    <total_debt_hours>72</total_debt_hours>
+    <debt_item id="TD-001" priority="high">
+      <title>Price fields stored as CharField</title>
+      <description>product_max_price and product_discount_price are CharField instead of DecimalField</description>
+      <impact>Cannot perform proper price calculations, sorting, or comparisons</impact>
+      <files>DjangoEcommerceApp/models.py</files>
+      <effort_hours>8</effort_hours>
+    </debt_item>
+    <debt_item id="TD-002" priority="high">
+      <title>Missing customer reference in orders</title>
+      <description>CustomerOrders model lacks customer_id foreign key</description>
+      <impact>Cannot track which customer placed an order</impact>
+      <files>DjangoEcommerceApp/models.py</files>
+      <effort_hours>4</effort_hours>
+    </debt_item>
+    <debt_item id="TD-003" priority="medium">
+      <title>Inconsistent naming conventions</title>
+      <description>Mix of snake_case and no separators (subcategories_id vs product_id)</description>
+      <impact>Code readability and maintainability</impact>
+      <files>DjangoEcommerceApp/models.py</files>
+      <effort_hours>16</effort_hours>
+    </debt_item>
+    <debt_item id="TD-004" priority="medium">
+      <title>No service layer abstraction</title>
+      <description>Business logic embedded directly in views</description>
+      <impact>Testing difficulty, code duplication</impact>
+      <files>DjangoEcommerceApp/AdminViews.py</files>
+      <effort_hours>24</effort_hours>
+    </debt_item>
+    <debt_item id="TD-005" priority="medium">
+      <title>No form validation classes</title>
+      <description>Form handling done manually in views without Django Forms</description>
+      <impact>Input validation gaps, code duplication</impact>
+      <files>DjangoEcommerceApp/AdminViews.py</files>
+      <effort_hours>16</effort_hours>
+    </debt_item>
+    <debt_item id="TD-006" priority="low">
+      <title>is_active as IntegerField</title>
+      <description>Boolean flag stored as IntegerField instead of BooleanField</description>
+      <impact>Type confusion, less explicit code</impact>
+      <files>DjangoEcommerceApp/models.py</files>
+      <effort_hours>4</effort_hours>
+    </debt_item>
+  </technical_debt>
+
+  <dependency_analysis>
+    <circular_dependencies>
+      <dependency>
+        <chain>None detected in current architecture</chain>
+        <status>Clean</status>
+      </dependency>
+    </circular_dependencies>
+    <dependency_issues>
+      <issue type="outdated" severity="medium">
+        <source>Django 3.1.7</source>
+        <description>Django 3.1 is end-of-life. Current LTS is Django 4.2+</description>
+      </issue>
+    </dependency_issues>
+  </dependency_analysis>
+
+  <recommendations>
+    <immediate_actions>
+      <action priority="P0">Move SECRET_KEY to environment variables</action>
+      <action priority="P0">Set DEBUG based on environment</action>
+      <action priority="P0">Remove @csrf_exempt from file_upload</action>
+      <action priority="P1">Add customer_id to CustomerOrders model</action>
+      <action priority="P1">Convert price fields to DecimalField</action>
+    </immediate_actions>
+
+    <short_term_improvements>
+      <improvement>Add Django REST Framework for API layer</improvement>
+      <improvement>Implement proper permission classes</improvement>
+      <improvement>Add Django Forms for input validation</improvement>
+      <improvement>Create service layer for business logic</improvement>
+      <improvement>Add unit and integration tests</improvement>
+      <improvement>Upgrade Django to 4.2 LTS</improvement>
+    </short_term_improvements>
+
+    <long_term_evolution>
+      <evolution>Migrate to PostgreSQL for production</evolution>
+      <evolution>Add Redis caching layer</evolution>
+      <evolution>Implement Celery for async tasks</evolution>
+      <evolution>Consider React/Vue frontend for customer-facing UI</evolution>
+      <evolution>Add comprehensive monitoring and alerting</evolution>
+    </long_term_evolution>
+  </recommendations>
+
+  <recommended_patterns>
+    <pattern>Repository Pattern - Abstract data access for testability</pattern>
+    <pattern>Service Layer - Extract business logic from views</pattern>
+    <pattern>Factory Pattern - For complex object creation (Orders)</pattern>
+    <pattern>Command Pattern - For transactional operations</pattern>
+    <pattern>API Gateway Pattern - When adding REST/GraphQL layer</pattern>
+  </recommended_patterns>
+
+  <adrs>
+    <adr ref="ADR-001" path=".sdlc/adr/ADR-001-monolithic-django-architecture.md" status="Accepted">
+      Monolithic Django Application Architecture
+    </adr>
+    <adr ref="ADR-002" path=".sdlc/adr/ADR-002-multi-role-authentication.md" status="Accepted">
+      Multi-Role Authentication Strategy
+    </adr>
+    <adr ref="ADR-003" path=".sdlc/adr/ADR-003-database-design.md" status="Accepted">
+      Database Design and Entity Relationships
+    </adr>
+    <adr ref="ADR-004" path=".sdlc/adr/ADR-004-security-improvements.md" status="Proposed">
+      Security Improvements Roadmap
+    </adr>
+    <adr ref="ADR-005" path=".sdlc/adr/ADR-005-api-layer-evolution.md" status="Proposed">
+      REST API Layer Evolution
+    </adr>
+  </adrs>
+</architecture_plan>

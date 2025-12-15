@@ -1,0 +1,30 @@
+---
+title: 'Admin List Filter Clearing'
+description: 'How to use the "Clear" filter button in admin list pages'
+---
+
+## Category and Subcategory List Filters
+
+In the admin dashboard, category and subcategory list pages include a "Clear" button to quickly reset applied filters.
+
+### Usage
+
+1. Enter a search term in the filter input field
+2. Click the "Search" button to apply the filter
+3. Click the "Clear" button to reset the filter and show all items
+
+### Locations
+
+- Category List Page: `category_list.html`
+- Subcategory List Page: `sub_category_list.html`
+
+### Technical Implementation
+
+The "Clear" button uses Django's URL routing to reset filter and sorting parameters by linking directly to the base list page URL.
+
+Example:
+```html
+<a href="{% url 'category_list' %}" class="btn btn-secondary">
+  <i class="fas fa-times"></i> Clear
+</a>
+```
