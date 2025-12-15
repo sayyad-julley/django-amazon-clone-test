@@ -1,52 +1,47 @@
 # API Rate Limiting
 
-## Authentication Endpoints Rate Limiting
+## Overview
+The application provides a robust rate limiting mechanism for authentication and API endpoints to prevent abuse and ensure fair usage.
 
-The Django Amazon Clone application implements robust rate limiting for authentication endpoints to prevent brute-force attacks and ensure system stability.
+## Rate Limiting Strategies
 
-### Rate Limit Configurations
+### Authentication Endpoints
+- **Strict Rate Limit**: 5 requests per minute
+- Progressive delay for repeated violations
+- Helps prevent brute-force attacks
 
-#### Authentication Login Process
-- **Decorator**: `@strict_auth_rate_limit`
-- **Limit**: 5 requests per minute
-- **Features**:
-  - IP-based tracking
-  - Progressive delay for repeated violations
-  - Detailed logging of rate limit events
+### Default API Endpoints
+- **Standard Rate Limit**: 10 requests per minute
+- Prevents excessive API usage
 
-#### REST API Authentication
-- **Decorator**: `@rest_auth_rate_limit`
-- **Limit**: 5 requests per minute
-- **Features**:
-  - Complementary to `strict_auth_rate_limit`
-  - Provides an additional layer of rate limiting
-  - Helps prevent automated attack attempts
+## Configuration
 
-### Implementation Details
+### IP-Based Tracking
+- Uses multi-method IP detection:
+  1. X-Forwarded-For header
+  2. X-Real-IP header
+  3. REMOTE_ADDR fallback
 
-The rate limiting is implemented using a sliding window algorithm with the following characteristics:
-- Uses Django's cache backend for tracking request timestamps
-- Normalizes IP addresses for accurate tracking
-- Supports both IPv4 and IPv6
-- Provides configurable request limits and time windows
+### Customization
+Rate limiters can be easily customized using the `enhanced_rate_limit` decorator:
 
-### Headers on Rate Limit Violation
+```python
+@enhanced_rate_limit(
+    max_requests=5,         # Maximum requests
+    window_seconds=60,      # Time window in seconds
+    key_prefix='auth_api',  # Unique cache key
+    progressive_delay=True  # Exponential backoff
+)
+def login_view(request):
+    # View logic
+```
 
-When a rate limit is exceeded, the following HTTP headers are returned:
-- `Retry-After`: Seconds to wait before next request
+## Response Headers
+When rate limit is exceeded:
+- `Retry-After`: Suggested wait time
 - `X-RateLimit-Limit`: Maximum allowed requests
-- `X-RateLimit-Remaining`: Remaining requests in current window
-- `X-RateLimit-Reset`: Timestamp when the current window resets
+- `X-RateLimit-Remaining`: Remaining requests
+- `X-RateLimit-Reset`: Window reset timestamp
 
-### Logging
-
-Rate limit events are logged with the following information:
-- Client IP address
-- Request count
-- Time window
-- Violation count (for progressive delay)
-
-### Best Practices
-- Implement rate limiting on all sensitive endpoints
-- Use different rate limit configurations for different endpoint types
-- Monitor and adjust limits based on application usage patterns
+## Logging
+Rate limit violations and successful checks are logged for monitoring and security analysis.
