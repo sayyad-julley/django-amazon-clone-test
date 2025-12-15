@@ -1,59 +1,52 @@
----
-title: 'Product Search API'
-description: 'Search functionality for the product list view in the Django E-Commerce App'
-icon: 'magnifying-glass'
----
+# Product Search Functionality
 
-## Product Search Functionality
+## Overview
 
-The product search provides a flexible and user-friendly way to find products across multiple fields.
+The product search functionality allows users to find products by searching across multiple fields with flexible and case-insensitive matching.
 
-### Search Capabilities
+## Search Fields
 
-- **Case-Insensitive Searching**: Matches products regardless of letter case
-- **Multi-Field Search**: Search across product name, description, and brand
-- **Partial Matching**: Find products with partial matches
+The search supports the following fields:
+- Product Name
+- Product Description
+- Brand
 
-### Search Parameters
+## Search Behavior
 
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `filter` | Search term for matching products | `?filter=nike` |
+### Case Insensitivity
+- Searches are case-insensitive
+- Examples:
+  - "Nike" matches "nike", "NIKE", "NiKe"
+  - "running" matches "RUNNING", "Running", "rUnNiNg"
 
-### Search Behavior
+### Partial Match
+- Supports partial matches across all searchable fields
+- Examples:
+  - "nik" finds Nike products
+  - "run" finds running-related products
+  - "foot" finds products with "football" in description
 
-1. **Name Search**: Matches products with names containing the search term
-   - Example: `?filter=running` finds "Nike Running Shoes"
+## Usage Examples
 
-2. **Brand Search**: Matches products with brands containing the search term
-   - Example: `?filter=adidas` finds all Adidas products
+### Frontend Search
 
-3. **Description Search**: Matches products with descriptions containing the search term
-   - Example: `?filter=performance` finds products with performance-related descriptions
-
-### Examples
-
-```python
-# Case-insensitive search
-GET /product-list?filter=nike  # Matches "Nike", "NIKE", "nIkE"
-
-# Partial match search
-GET /product-list?filter=run   # Matches "Running Shoes"
-
-# Multi-field search
-GET /product-list?filter=performance athlete  # Matches across multiple fields
+```javascript
+// Sample search input
+const searchQuery = 'Nike';
 ```
 
-### Pagination
+### Backend Query
 
-- Default: 3 products per page
-- Search results maintain standard pagination
+```python
+# Django ORM search query
+Products.objects.filter(
+    Q(product_name__icontains=search_query) |
+    Q(product_description__icontains=search_query) |
+    Q(brand__icontains=search_query)
+)
+```
 
-### Error Handling
+## Performance Considerations
 
-- Empty search returns all products
-- No matching results returns an empty list
-
-### Performance Considerations
-
-The search is implemented using Django's `icontains` lookup, which provides efficient case-insensitive partial matching across multiple fields.
+- Uses Django's `icontains` for case-insensitive, partial matching
+- Indexes on `product_name`, `product_description`, and `brand` fields recommended for optimal performance
