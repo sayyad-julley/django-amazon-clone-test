@@ -1,0 +1,52 @@
+# API Rate Limiting
+
+## Authentication Endpoints Rate Limiting
+
+The Django Amazon Clone application implements robust rate limiting for authentication endpoints to prevent brute-force attacks and ensure system stability.
+
+### Rate Limit Configurations
+
+#### Authentication Login Process
+- **Decorator**: `@strict_auth_rate_limit`
+- **Limit**: 5 requests per minute
+- **Features**:
+  - IP-based tracking
+  - Progressive delay for repeated violations
+  - Detailed logging of rate limit events
+
+#### REST API Authentication
+- **Decorator**: `@rest_auth_rate_limit`
+- **Limit**: 5 requests per minute
+- **Features**:
+  - Complementary to `strict_auth_rate_limit`
+  - Provides an additional layer of rate limiting
+  - Helps prevent automated attack attempts
+
+### Implementation Details
+
+The rate limiting is implemented using a sliding window algorithm with the following characteristics:
+- Uses Django's cache backend for tracking request timestamps
+- Normalizes IP addresses for accurate tracking
+- Supports both IPv4 and IPv6
+- Provides configurable request limits and time windows
+
+### Headers on Rate Limit Violation
+
+When a rate limit is exceeded, the following HTTP headers are returned:
+- `Retry-After`: Seconds to wait before next request
+- `X-RateLimit-Limit`: Maximum allowed requests
+- `X-RateLimit-Remaining`: Remaining requests in current window
+- `X-RateLimit-Reset`: Timestamp when the current window resets
+
+### Logging
+
+Rate limit events are logged with the following information:
+- Client IP address
+- Request count
+- Time window
+- Violation count (for progressive delay)
+
+### Best Practices
+- Implement rate limiting on all sensitive endpoints
+- Use different rate limit configurations for different endpoint types
+- Monitor and adjust limits based on application usage patterns
