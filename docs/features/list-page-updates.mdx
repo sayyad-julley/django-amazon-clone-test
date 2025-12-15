@@ -1,0 +1,28 @@
+# List Page Total Count Feature
+
+## Overview
+This feature adds a total count display to list page headers for categories, subcategories, products, and merchants.
+
+## Implementation Details
+- Added total count display using `{{ list_variable|length }}` in page titles
+- Locations updated:
+  - `category_list.html`
+  - `sub_category_list.html`
+  - `product_list.html`
+  - `merchant_list.html`
+
+## Usage Example
+```html
+<!-- Example from category_list.html -->
+<h4>Category List <small>(Total: {{ categories_list|length }})</small></h4>
+```
+
+## Acceptance Criteria
+- [x] Total count displayed in category list header
+- [x] Total count displayed in subcategory list header
+- [x] Total count displayed in product list header
+- [x] Total count displayed in merchant list header
+- [x] Count updates correctly based on filtered results
+
+## Related Issue
+- AGENTIC-120

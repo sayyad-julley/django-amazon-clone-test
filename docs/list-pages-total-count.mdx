@@ -1,0 +1,30 @@
+# List Pages Total Count Display
+
+## Overview
+The application now displays the total count of items in list page headers across various admin templates.
+
+## Implemented Templates
+- Category List Page
+- Sub-Category List Page
+- Product List Page
+- Merchant List Page
+
+## Implementation Details
+Each list page header now includes a small text showing the total number of items in the current list.
+
+Example:
+```html
+<h4>Categories <small>(Total: {{ categories_list|length }})</small></h4>
+```
+
+## Usage
+The total count is dynamically calculated using Django's template filter `|length`, which automatically updates based on the current list contents.
+
+## Benefits
+- Provides immediate visual feedback about list size
+- Helps administrators quickly understand data volume
+- No additional backend logic required
+
+## Compatibility
+- Works with pagination
+- Reflects current filtered/searched results
