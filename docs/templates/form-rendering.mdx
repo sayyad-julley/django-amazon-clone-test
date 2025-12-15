@@ -1,0 +1,39 @@
+---
+title: 'Form Rendering Best Practices'
+description: 'Guidelines for consistent form rendering in Django templates'
+---
+
+## Required Field Indicators
+
+### Overview
+We've standardized the approach for marking required form fields across all admin templates.
+
+### Implementation Details
+- Red asterisk (\*) added to required field labels
+- Consistent markup: `{{ field.label }}{% if field.field.required %} <span style="color: red;">*</span>{% endif %}`
+- Follows accessibility guidelines by visually indicating mandatory fields
+- Applied across multiple admin templates including:
+  - Category Create/Update
+  - Sub-Category Create/Update
+  - Product Create/Edit
+
+### Code Example
+```django
+<div class="form-group">
+    <label>
+        {{ field.label }}
+        {% if field.field.required %}
+            <span style="color: red;">*</span>
+        {% endif %}
+    </label>
+    <!-- Input field here -->
+</div>
+```
+
+### Best Practices
+- Always use `field.field.required` to determine if a field is mandatory
+- Maintain consistent styling for the asterisk
+- Ensure color contrast meets accessibility standards
+
+### Motivation
+Improves user experience by clearly indicating which form fields are required, reducing potential user confusion during form submission.

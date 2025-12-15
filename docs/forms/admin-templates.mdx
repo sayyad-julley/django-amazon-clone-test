@@ -1,0 +1,25 @@
+## Form Label Changes
+
+In this update, we added a red asterisk (*) to indicate required fields across various admin template forms. 
+
+### Changes Made
+- Added `{% if field.field.required %} <span style="color: red;">*</span>{% endif %}` to label rendering in:
+  - `category_create.html`
+  - `category_update.html`
+  - `sub_category_create.html`
+  - `sub_category_update.html`
+  - `product_create.html`
+  - `product_edit.html`
+
+### Usage
+Required fields will now display a red asterisk (*) next to their labels, making mandatory fields more visually distinct for users.
+
+### Example
+```html
+<label>Product Name <span style="color: red;">*</span></label>
+```
+
+### Benefits
+- Improved user experience
+- Clear indication of mandatory fields
+- Consistent styling across admin forms

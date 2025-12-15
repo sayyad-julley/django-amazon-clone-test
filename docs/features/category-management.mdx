@@ -1,19 +1,32 @@
----
-title: 'Category Management Features'
-description: 'Overview of category and subcategory management features'
----
 
-## Clear Filter Functionality
+# Category Management Feature: Total Count Display
 
-In both the Category and Subcategory list pages, a "Clear" button is provided next to the search input. This button allows users to quickly reset the filter and view all items.
+## Overview
+In the admin templates for categories, subcategories, products, and merchant lists, a total count display has been implemented to provide quick visibility into the number of items in each list.
 
-### Features
-- Instantly clears any applied filters
-- Resets the list to show all items
-- Located in both category and subcategory list views
+## List Templates with Total Count
+The following list templates include a total count display in their header:
 
-### Usage Example
-1. Apply a filter in the search input
-2. Click the "Clear" button
-3. The list will reset to show all items
+1. **Category List**: `Category List <small>(Total: {{ categories_list|length }})</small>`
+2. **Subcategory List**: `Sub Category List <small>(Total: {{ subcategories_list|length }})</small>`
+3. **Product List**: `Product List <small>(Total: {{ object_list|length }})</small>`
+4. **Merchant List**: `Merchant User List <small>(Total: {{ merchantuser_list|length }})</small>`
+
+## Implementation Details
+- The total count is dynamically calculated using the Django template `|length` filter
+- Displayed in a small tag next to the list title
+- Updates automatically based on the current filtered/paginated list
+
+## Benefits
+- Provides immediate insight into the number of items
+- Helps users quickly understand the scope of the list
+- Responsive to filtering and pagination
+
+## Related Issues
+- AGENTIC-120: Display total count of items in list page headers
+
+## Best Practices
+- Ensure consistent styling across different list templates
+- Keep the total count display simple and unobtrusive
+- Use Django's built-in length filter for dynamic counting
 

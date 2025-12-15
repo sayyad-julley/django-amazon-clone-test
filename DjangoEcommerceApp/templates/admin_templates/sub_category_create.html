@@ -24,7 +24,7 @@ Sub Category Create
         {% csrf_token %}
         {% for field in form %}
         <div class="form-group">
-            <label>{{ field.label }}</label>
+            <label>{{ field.label }}{% if field.field.required %} <span style="color: red;">*</span>{% endif %}</label>
             {% if field.field.widget.input_type != "select" %}
             <input type="{{ field.field.widget.input_type }}" name={{ field.name }} id="{{ field.name }}" class="form-control">
             {% endif %}

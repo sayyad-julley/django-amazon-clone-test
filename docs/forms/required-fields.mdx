@@ -1,0 +1,31 @@
+# Required Fields Indicator
+
+## Overview
+
+All forms in the admin templates now feature a visual indicator for required fields.
+
+## Implementation Details
+
+- Required fields are marked with a red asterisk (*) next to their labels
+- The asterisk is added dynamically using Django template conditionals
+- Styles are consistent across all admin template forms
+
+## Example
+
+```html
+<label>Title <span style="color: red;">*</span></label>
+```
+
+## Affected Templates
+
+- `category_create.html`
+- `category_update.html`
+- `sub_category_create.html`
+- `sub_category_update.html`
+- `product_create.html`
+- `product_edit.html`
+
+## Best Practices
+
+- Always use the `{% if field.field.required %}` conditional to add required field indicators
+- Maintain consistency in styling across all forms
