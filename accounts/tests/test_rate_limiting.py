@@ -1,10 +1,12 @@
 import time
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.test.client import RequestFactory
 from unittest.mock import patch
 import json
+
+User = get_user_model()
 
 class RateLimitingTestCase(TestCase):
     def setUp(self):
@@ -18,7 +20,8 @@ class RateLimitingTestCase(TestCase):
         self.test_user_data = {
             'username': 'testuser',
             'email': 'test@example.com',
-            'password': 'testpassword123!'
+            'password': 'testpassword123!',
+            'user_type': 1  # Admin type based on CustomUser model
         }
         self.user = User.objects.create_user(**self.test_user_data)
 
@@ -27,14 +30,15 @@ class RateLimitingTestCase(TestCase):
         Test registration endpoint rate limiting.
         Verify that a single IP can only make 5 registration attempts in 1 minute.
         """
-        registration_url = reverse('register')  # Adjust URL name as needed
+        registration_url = reverse('customer_create')  # Use the correct URL name
 
         # Simulate registration attempts from the same IP
         for i in range(5):
             response = self.client.post(registration_url, data={
                 'username': f'newuser{i}',
                 'email': f'newuser{i}@example.com',
-                'password': 'securepassword123!'
+                'password': 'securepassword123!',
+                'user_type': 4  # Customer user type
             }, REMOTE_ADDR='192.168.1.100')
 
             # First 5 attempts should be successful
@@ -45,7 +49,8 @@ class RateLimitingTestCase(TestCase):
         response = self.client.post(registration_url, data={
             'username': 'newuser6',
             'email': 'newuser6@example.com',
-            'password': 'securepassword123!'
+            'password': 'securepassword123!',
+            'user_type': 4
         }, REMOTE_ADDR='192.168.1.100')
 
         self.assertEqual(response.status_code, 429,
@@ -61,7 +66,7 @@ class RateLimitingTestCase(TestCase):
         Test login endpoint rate limiting.
         Verify that a single IP can only make 5 login attempts in 1 minute.
         """
-        login_url = reverse('login')  # Adjust URL name as needed
+        login_url = reverse('admin_login_process')  # Use the correct URL name
 
         # Simulate login attempts from the same IP
         for i in range(5):
@@ -92,7 +97,7 @@ class RateLimitingTestCase(TestCase):
         """
         Test that rate limiting applies a progressive delay mechanism.
         """
-        login_url = reverse('login')  # Adjust URL name as needed
+        login_url = reverse('admin_login_process')  # Use the correct URL name
 
         # Track the time between requests to verify progressive delay
         request_timestamps = []
@@ -130,7 +135,7 @@ class RateLimitingTestCase(TestCase):
         """
         Verify that rate limiting is IP-based and different IPs do not interfere.
         """
-        login_url = reverse('login')  # Adjust URL name as needed
+        login_url = reverse('admin_login_process')  # Use the correct URL name
 
         # Make 5 login attempts from one IP
         for i in range(5):

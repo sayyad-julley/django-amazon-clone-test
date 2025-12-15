@@ -1,47 +1,75 @@
-# API Rate Limiting
+---
+title: 'API Rate Limiting'
+description: 'Enhanced security through intelligent request rate limiting'
+---
 
 ## Overview
-The application provides a robust rate limiting mechanism for authentication and API endpoints to prevent abuse and ensure fair usage.
 
-## Rate Limiting Strategies
+Rate limiting is a critical security mechanism that protects our authentication and registration endpoints from potential abuse, brute-force attacks, and unintended system overload.
 
-### Authentication Endpoints
-- **Strict Rate Limit**: 5 requests per minute
-- Progressive delay for repeated violations
-- Helps prevent brute-force attacks
+## Rate Limit Configurations
 
-### Default API Endpoints
-- **Standard Rate Limit**: 10 requests per minute
-- Prevents excessive API usage
+Our rate limiting strategy provides granular control across different authentication endpoints:
 
-## Configuration
+### Login Endpoint
+- **Maximum Requests**: 5 requests per minute
+- **Scope**: Per IP address
+- **Mechanism**: Progressive delay with exponential backoff
+- **Response**: 
+  - HTTP 429 (Too Many Requests) when limit is exceeded
+  - `Retry-After` header indicates delay before next attempt
+
+### Registration Endpoint
+- **Maximum Requests**: 3 requests per 5 minutes
+- **Scope**: Per IP address
+- **Mechanism**: Progressive delay to prevent mass account creation
+- **Response**: 
+  - HTTP 429 (Too Many Requests) when limit is exceeded
+  - `Retry-After` header indicates delay before next attempt
+
+### Response Headers
+
+All rate-limited responses include informative headers:
+- `X-RateLimit-Limit`: Maximum allowed requests
+- `X-RateLimit-Remaining`: Remaining requests in current window
+- `Retry-After`: Seconds to wait before next request
+
+## Implementation Details
 
 ### IP-Based Tracking
-- Uses multi-method IP detection:
-  1. X-Forwarded-For header
-  2. X-Real-IP header
-  3. REMOTE_ADDR fallback
+- Supports both IPv4 and IPv6 addresses
+- Multiple proxy header detection (X-Forwarded-For, X-Real-IP)
+- Normalization to prevent bypass attempts
 
-### Customization
-Rate limiters can be easily customized using the `enhanced_rate_limit` decorator:
+### Progressive Delay Mechanism
+The delay between requests increases exponentially after repeated violations:
+1. First violation: Immediate retry allowed
+2. Subsequent violations: Increasing wait times
+3. Maximum delay: 1 hour
+
+## Best Practices
+
+1. Handle rate limit responses gracefully in client applications
+2. Implement client-side backoff and retry logic
+3. Log and monitor rate limit events for security insights
+
+## Example Client Handling
 
 ```python
-@enhanced_rate_limit(
-    max_requests=5,         # Maximum requests
-    window_seconds=60,      # Time window in seconds
-    key_prefix='auth_api',  # Unique cache key
-    progressive_delay=True  # Exponential backoff
-)
-def login_view(request):
-    # View logic
+def login_with_retry(username, password):
+    try:
+        response = login_api_call(username, password)
+    except RateLimitError as e:
+        retry_after = e.headers.get('Retry-After')
+        time.sleep(int(retry_after))
+        # Retry login after specified delay
+        response = login_api_call(username, password)
 ```
 
-## Response Headers
-When rate limit is exceeded:
-- `Retry-After`: Suggested wait time
-- `X-RateLimit-Limit`: Maximum allowed requests
-- `X-RateLimit-Remaining`: Remaining requests
-- `X-RateLimit-Reset`: Window reset timestamp
+## Security Considerations
 
-## Logging
-Rate limit violations and successful checks are logged for monitoring and security analysis.
+- Rate limiting helps prevent:
+  - Brute-force password attempts
+  - Credential stuffing attacks
+  - Account enumeration
+  - Denial of Service (DoS) attacks
