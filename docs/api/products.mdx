@@ -1,0 +1,43 @@
+## Product Ratings
+
+### Average Rating
+
+Each product now includes an `average_rating` field that provides the aggregated rating from customer reviews.
+
+#### Properties
+
+- `average_rating`: A DecimalField storing the pre-calculated average rating
+  - Type: Decimal
+  - Max Digits: 3
+  - Decimal Places: 2
+  - Nullable: Yes
+
+- `dynamic_average_rating`: A property method that calculates the rating on-the-fly if `average_rating` is None
+  - Returns current product's rating
+  - Calculates from active reviews
+  - Returns 0.0 if no reviews exist
+
+#### Rating Calculation
+
+1. Ratings are automatically updated when:
+   - A new review is added
+   - An existing review is modified
+   - A review is deleted
+
+2. Only active reviews (is_active=1) are considered in rating calculation
+
+#### Example Usage
+
+```python
+# Get the average rating
+product = Products.objects.get(id=product_id)
+current_rating = product.average_rating  # Pre-calculated
+current_dynamic_rating = product.dynamic_average_rating  # Calculated on-the-fly
+```
+
+### Admin Interface
+
+In the Django admin interface, you can view:
+- Pre-calculated `average_rating`
+- Dynamic average rating calculation
+- Filter and search products by rating

@@ -84,6 +84,20 @@ class Products(models.Model):
     added_by_merchant=models.ForeignKey(MerchantUser,on_delete=models.CASCADE)
     in_stock_total=models.IntegerField(default=1)
     is_active=models.IntegerField(default=1)
+    average_rating=models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True)
+
+    @property
+    def dynamic_average_rating(self):
+        """Calculate average rating on-the-fly if average_rating is None."""
+        if self.average_rating is not None:
+            return self.average_rating
+
+        reviews = ProductReviews.objects.filter(product_id=self, is_active=1)
+        if not reviews.exists():
+            return 0.0
+
+        total_rating = sum(float(review.rating) for review in reviews)
+        return round(total_rating / reviews.count(), 2)
 
 class ProductMedia(models.Model):
     id=models.AutoField(primary_key=True)
