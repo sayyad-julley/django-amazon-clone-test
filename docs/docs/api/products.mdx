@@ -1,0 +1,36 @@
+## Product Rating Field
+
+### Overview
+
+Each product in the system has an `average_rating` field that automatically tracks the average rating from product reviews. 
+
+### Attributes
+
+- `average_rating`: A DecimalField storing the product's average rating
+  - Type: Decimal
+  - Max Digits: 3
+  - Decimal Places: 2
+  - Nullable: Yes
+  - Blank: Yes
+  - Default: None
+
+### Calculation Methods
+
+1. **Cached Average Rating**
+   The `average_rating` field is automatically updated whenever a review is added, updated, or deleted.
+
+2. **Dynamic Rating Calculation**
+   A `dynamic_average_rating` property method ensures the rating is always up-to-date:
+   - Calculates rating from active reviews
+   - Returns 0.0 if no reviews exist
+   - Rounds to 2 decimal places
+   - Updates the cached `average_rating` field if different
+
+### Usage Example
+
+```python
+# Get a product's rating
+product = Products.objects.get(id=1)
+print(product.average_rating)  # Cached rating
+print(product.dynamic_average_rating)  # Dynamically calculated rating
+```
