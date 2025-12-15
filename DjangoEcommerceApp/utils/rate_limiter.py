@@ -175,15 +175,61 @@ def standard_api_rate_limit(func: Callable) -> Callable:
 def rest_auth_rate_limit(func: Callable) -> Callable:
     """
     Enhanced rate limiting for REST API authentication endpoints.
-    5 requests per minute with progressive delay and detailed error handling.
+    Implements adaptive rate limiting with more granular controls:
+    - 5 requests per minute for login
+    - Progressive delay with exponential backoff
+    - Different limits for login, registration, and password reset
+    - Supports per-user and per-IP tracking
     """
-    return enhanced_rate_limit(
-        max_requests=5,
-        window_seconds=60,
-        key_prefix='rest_auth_api',
-        error_message='Authentication API rate limit exceeded. Please wait and retry.',
-        progressive_delay=True
-    )(func)
+    def wrapper(request: HttpRequest, *args: Any, **kwargs: Any) -> Any:
+        # Determine the authentication action for more specific rate limiting
+        auth_action = request.path.split('/')[-1]
+
+        # Configure limits based on the authentication action
+        action_limits = {
+            'login': {
+                'max_requests': 5,
+                'window_seconds': 60,
+                'key_prefix': 'login_auth_api',
+                'error_message': 'Too many login attempts. Please wait and retry.',
+                'progressive_delay': True
+            },
+            'register': {
+                'max_requests': 3,
+                'window_seconds': 300,  # 5 minutes for registration
+                'key_prefix': 'register_auth_api',
+                'error_message': 'Registration temporarily limited. Please try again later.',
+                'progressive_delay': True
+            },
+            'reset-password': {
+                'max_requests': 2,
+                'window_seconds': 3600,  # 1 hour for password reset
+                'key_prefix': 'reset_password_api',
+                'error_message': 'Password reset attempts exceeded. Please contact support.',
+                'progressive_delay': True
+            },
+            'default': {
+                'max_requests': 5,
+                'window_seconds': 60,
+                'key_prefix': 'default_auth_api',
+                'error_message': 'Authentication API rate limit exceeded. Please wait and retry.',
+                'progressive_delay': True
+            }
+        }
+
+        # Select appropriate limit configuration
+        limit_config = action_limits.get(auth_action, action_limits['default'])
+
+        # Use enhanced rate limiter with specific configuration
+        return enhanced_rate_limit(
+            max_requests=limit_config['max_requests'],
+            window_seconds=limit_config['window_seconds'],
+            key_prefix=limit_config['key_prefix'],
+            error_message=limit_config['error_message'],
+            progressive_delay=limit_config['progressive_delay']
+        )(func)(request, *args, **kwargs)
+
+    return wrapper
 
 def user_profile_rate_limit(func: Callable) -> Callable:
     """

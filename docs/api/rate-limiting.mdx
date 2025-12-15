@@ -1,0 +1,46 @@
+# API Rate Limiting
+
+## Overview
+
+Our API implements a robust rate limiting mechanism to protect against abuse, prevent brute-force attacks, and ensure fair usage of authentication endpoints.
+
+## Rate Limiting Configuration
+
+### Authentication Endpoints
+
+Different authentication actions have specific rate limits:
+
+| Action           | Max Requests | Window   | Progressive Delay | 
+|-----------------|--------------|----------|------------------|
+| Login           | 5/minute     | 60 sec   | Yes              |
+| Registration    | 3/5 minutes  | 300 sec  | Yes              |
+| Password Reset  | 2/hour       | 3600 sec | Yes              |
+
+### Features
+
+- **Adaptive Rate Limiting**: Configurable limits per endpoint
+- **Progressive Delay**: Increasing wait times for repeated violations
+- **Detailed Error Handling**: Informative error messages
+- **IP-based Tracking**: Prevents abuse from specific IP addresses
+
+### Example Usage
+
+```python
+@rest_auth_rate_limit
+def login_view(request):
+    # Login logic here
+    pass
+```
+
+### Error Responses
+
+When rate limit is exceeded, a `429 Too Many Requests` response is returned with:
+- Custom error message
+- `Retry-After` header
+- `X-RateLimit-*` headers for client guidance
+
+## Security Considerations
+
+- Protects against brute-force attacks
+- Helps prevent credential stuffing
+- Reduces potential DoS (Denial of Service) risks
