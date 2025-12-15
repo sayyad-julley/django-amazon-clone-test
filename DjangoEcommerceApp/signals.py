@@ -7,10 +7,10 @@ def update_product_rating(product):
     reviews = ProductReviews.objects.filter(product_id=product, is_active=1)
 
     if reviews.exists():
-        total_rating = sum(float(review.rating) for review in reviews)
+        total_rating = sum(review.rating for review in reviews)
         product.average_rating = round(total_rating / reviews.count(), 2)
     else:
-        product.average_rating = None
+        product.average_rating = 0.0
 
     product.save(update_fields=['average_rating'])
 

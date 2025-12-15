@@ -88,16 +88,25 @@ class Products(models.Model):
 
     @property
     def dynamic_average_rating(self):
-        """Calculate average rating on-the-fly if average_rating is None."""
-        if self.average_rating is not None:
-            return self.average_rating
-
+        """
+        Calculate average rating on-the-fly.
+        This method ensures the average rating is always up-to-date.
+        """
         reviews = ProductReviews.objects.filter(product_id=self, is_active=1)
         if not reviews.exists():
+            self.average_rating = 0.0
+            self.save()
             return 0.0
 
         total_rating = sum(float(review.rating) for review in reviews)
-        return round(total_rating / reviews.count(), 2)
+        calculated_rating = round(total_rating / reviews.count(), 2)
+
+        # Update the cached rating if it differs from the calculated rating
+        if self.average_rating != calculated_rating:
+            self.average_rating = calculated_rating
+            self.save()
+
+        return calculated_rating
 
 class ProductMedia(models.Model):
     id=models.AutoField(primary_key=True)
@@ -154,7 +163,7 @@ class ProductReviews(models.Model):
     product_id=models.ForeignKey(Products,on_delete=models.CASCADE)
     user_id=models.ForeignKey(CustomerUser,on_delete=models.CASCADE)
     review_image=models.FileField()
-    rating=models.CharField(default="5",max_length=255)
+    rating=models.DecimalField(default=5.0, max_digits=3, decimal_places=2)
     review=models.TextField(default="")
     created_at=models.DateTimeField(auto_now_add=True)
     is_active=models.IntegerField(default=1)
