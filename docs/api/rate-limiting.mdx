@@ -3,71 +3,59 @@ title: 'API Rate Limiting'
 description: 'Comprehensive rate limiting strategy for authentication endpoints'
 ---
 
-## Overview
+## Authentication Rate Limiting
 
-Our API implements a robust, flexible rate limiting mechanism to protect against abuse and ensure service stability. The rate limiting is implemented using decorators that can be easily applied to different API endpoints with configurable parameters.
+Our Django application implements a robust, multi-layered rate limiting strategy to protect authentication endpoints from abuse and potential brute-force attacks.
 
-## Rate Limiting Strategies
+### Key Features
 
-### Authentication Rate Limiting
+- **IP-Based Tracking**: Rate limits are enforced at the IP address level
+- **Progressive Delay**: Exponential backoff for repeated violations
+- **Granular Endpoint Controls**: Different rate limits for various authentication actions
 
-#### Strict Authentication Rate Limit
-- Applies to login endpoints
+### Rate Limit Configurations
+
+#### Login Endpoint
 - **Limit**: 5 requests per minute
-- **Features**:
-  - Progressive delay with exponential backoff
-  - Prevents brute-force attacks
-  - Logs rate limit violations
+- **Behavior**: Progressive delay increases with repeated violations
+- **Error Response**: 429 Too Many Requests with detailed headers
 
-#### REST Authentication Rate Limit
-Dynamically configures rate limits based on authentication action:
+#### Registration Endpoint
+- **Limit**: 3 requests per 5 minutes
+- **Behavior**: Progressive delay to prevent mass registrations
+- **Error Response**: 429 Too Many Requests with retry guidance
 
-1. **Login**:
-   - 5 requests per minute
-   - Progressive delay
-   - Detailed violation tracking
+#### Password Reset Endpoint
+- **Limit**: 2 requests per hour
+- **Behavior**: Strict rate limiting to prevent password reset abuse
+- **Error Response**: 429 Too Many Requests with support contact suggestion
 
-2. **Registration**:
-   - 3 requests per 5 minutes
-   - Progressive delay
-   - Prevents mass account creation
+### Response Headers
 
-3. **Password Reset**:
-   - 2 requests per hour
-   - Progressive delay
-   - Protects against password reset abuse
+When rate limit is exceeded, responses include:
+- `Retry-After`: Seconds to wait before next attempt
+- `X-RateLimit-Limit`: Maximum allowed requests
+- `X-RateLimit-Remaining`: Remaining requests in current window
+- `X-RateLimit-Reset`: Timestamp when limit resets
 
-### Other Rate Limit Types
+### Implementation Details
 
-- **Standard API Rate Limit**: 10 requests per minute for general API endpoints
-- **User Profile Rate Limit**: 10 requests per minute for profile and logout endpoints
-
-## Implementation Details
-
-Rate limiting is implemented using the `enhanced_rate_limit` decorator in `DjangoEcommerceApp/utils/rate_limiter.py`. Key features include:
-
-- IP-based tracking
-- Configurable request limits and time windows
-- Detailed logging
-- Retry-After headers
-- Progressive delay mechanism
-
-## Example Usage
+Rate limiting is implemented using Django's cache and a custom decorator `enhanced_rate_limit()`. 
+This allows for flexible, configurable rate limiting across different endpoints.
 
 ```python
-@strict_auth_rate_limit
+@strict_auth_rate_limit  # 5 requests per minute with progressive delay
+@rest_auth_rate_limit   # Adds additional API-level rate limiting
 def adminLoginProcess(request):
-    # Login logic here
-    pass
-
-@rest_auth_rate_limit
-def registerUser(request):
-    # Registration logic here
-    pass
+    # Authentication logic here
 ```
 
-## Best Practices
+### Logging
 
-- Apply appropriate rate limiting decorators to sensitive endpoints
-- Monitor rate limit logs for potential abuse
-- Adjust limits based on traffic patterns and security requirements
+All rate limit events are logged with:
+- Timestamp
+- Client IP
+- Number of requests
+- Violation details
+
+Logs are written to `rate_limit.log` for monitoring and analysis.

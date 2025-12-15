@@ -1,52 +1,43 @@
-# Product Search Functionality
+---
+title: 'Product Search Functionality'
+description: 'Enhanced search capabilities for product listing'
+---
 
 ## Overview
+The Product Search functionality provides a robust way to search and filter products across multiple attributes.
 
-The product search functionality allows users to find products by searching across multiple fields with flexible and case-insensitive matching.
+## Search Features
+- **Supported Fields**: 
+  - Product Name
+  - Brand
+  - Product Description
 
-## Search Fields
+### Search Capabilities
+- **Case Insensitive**: Search terms match regardless of capitalization
+- **Partial Matching**: Supports partial search terms
 
-The search supports the following fields:
-- Product Name
-- Product Description
-- Brand
+## Search Query Examples
 
-## Search Behavior
-
-### Case Insensitivity
-- Searches are case-insensitive
-- Examples:
-  - "Nike" matches "nike", "NIKE", "NiKe"
-  - "running" matches "RUNNING", "Running", "rUnNiNg"
-
-### Partial Match
-- Supports partial matches across all searchable fields
-- Examples:
-  - "nik" finds Nike products
-  - "run" finds running-related products
-  - "foot" finds products with "football" in description
-
-## Usage Examples
-
-### Frontend Search
-
-```javascript
-// Sample search input
-const searchQuery = 'Nike';
+### Basic Search
+```python
+# Search for products containing 'nike' (case-insensitive)
+ProductListView.get_queryset(filter='nike')
 ```
 
-### Backend Query
-
+### Advanced Search Scenarios
 ```python
-# Django ORM search query
-Products.objects.filter(
-    Q(product_name__icontains=search_query) |
-    Q(product_description__icontains=search_query) |
-    Q(brand__icontains=search_query)
-)
+# Will match products with name, brand, or description containing 'shirt'
+ProductListView.get_queryset(filter='shirt')
+
+# Will find Nike products, matching 'Nike', 'nike', or 'NIKE'
+ProductListView.get_queryset(filter='Nike')
 ```
 
 ## Performance Considerations
+- Search queries use Django's `Q` objects for efficient database lookups
+- Utilizes `icontains` for case-insensitive, partial matching
+- Maintains pagination and sorting functionality during search
 
-- Uses Django's `icontains` for case-insensitive, partial matching
-- Indexes on `product_name`, `product_description`, and `brand` fields recommended for optimal performance
+## Best Practices
+- Use concise, meaningful search terms
+- Combine search with sorting for more precise results

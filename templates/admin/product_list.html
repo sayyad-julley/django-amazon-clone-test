@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="admin-product-list">
+    <h1>Product Management</h1>
+
+    <form method="get" class="search-form">
+        <input
+            type="text"
+            name="q"
+            placeholder="Search products..."
+            value="{{ search_query }}"
+        >
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="product-stats">
+        <p>Total Products: {{ total_products }}</p>
+    </div>
+
+    <table class="product-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.brand }}</td>
+                <td>{{ product.product_description|truncatewords:10 }}</td>
+                <td>
+                    <a href="{% url 'product_edit' product.id %}">Edit</a>
+                    <a href="{% url 'product_delete' product.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No products found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "admin/pagination.html" %}
+</div>
+{% endblock %}

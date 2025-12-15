@@ -1,8 +1,15 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from DjangoEcommerceApp.models import CustomUser
 from DjangoEcommerceApp.models import Products, MerchantUser, SubCategories, Categories
 from django.urls import reverse
+from django.urls import path
+from DjangoEcommerceApp.AdminViews import ProductListView
 
+urlpatterns = [
+    path('admin/product-list/', ProductListView.as_view(), name='product_list'),
+]
+
+@override_settings(ROOT_URLCONF=__name__)
 class ProductSearchTestCase(TestCase):
     def setUp(self):
         # Create a merchant user
@@ -14,6 +21,9 @@ class ProductSearchTestCase(TestCase):
             is_active=True
         )
         merchant_profile, _ = MerchantUser.objects.get_or_create(auth_user_id=self.merchant_user)
+
+        # Log in the user for the tests
+        self.client.login(username='testmerchant', password='testpass')
 
         # Create a category
         self.category = Categories.objects.create(

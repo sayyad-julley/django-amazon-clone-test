@@ -23,5 +23,6 @@ from django.urls import include
 from DjangoEcommerce import settings
 
 urlpatterns = [
-    path('admindashboard/',include("DjangoEcommerceApp.adminurls"))
+    path('admindashboard/', include("DjangoEcommerceApp.adminurls")),
+    path('products/', include("products.urls"))
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
