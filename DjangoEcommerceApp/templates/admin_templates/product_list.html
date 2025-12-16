@@ -134,9 +134,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectAllCheckbox = document.getElementById('selectAllProducts');
     const productCheckboxes = document.querySelectorAll('.product-checkbox');
 
+    // Improved "Select All" functionality
     selectAllCheckbox.addEventListener('change', function() {
         productCheckboxes.forEach(function(checkbox) {
             checkbox.checked = selectAllCheckbox.checked;
+        });
+
+        // Optional: Add visual feedback
+        const checkboxContainer = document.querySelector('.custom-control.custom-checkbox');
+        checkboxContainer.classList.toggle('selected', selectAllCheckbox.checked);
+    });
+
+    // Optional: Uncheck "Select All" if not all individual checkboxes are selected
+    productCheckboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            const allChecked = Array.from(productCheckboxes).every(cb => cb.checked);
+            selectAllCheckbox.checked = allChecked;
         });
     });
 });
