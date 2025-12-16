@@ -1,0 +1,24 @@
+---
+title: Product List View
+description: Displaying product details in the admin product list
+---
+
+## Product ID Display
+
+### Overview
+The product list view includes a Product ID badge for each product, providing a clear and easily identifiable unique identifier.
+
+### Implementation Details
+- Location: Admin Product List Template
+- Display Method: Warning-styled badge
+- Accessor: `{{ product.product.id }}`
+
+### Example
+```html
+<p><span class="badge badge-warning">Product ID: {{ product.product.id }}</span></p>
+```
+
+### Notes
+- The Product ID is displayed alongside other product details
+- Easily viewable in the product card layout
+- No additional modifications were required to meet the display requirements
