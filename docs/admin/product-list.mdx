@@ -1,0 +1,22 @@
+# Admin Product List
+
+## Merchant Column
+
+The admin product list table includes a "Merchant" column that displays the company name for each product. This allows administrators to quickly identify which merchant added a particular product.
+
+### Features
+- Displays merchant's company name for each product
+- Visible in the admin product list table
+- Styled with a badge for clear visibility
+
+### Example
+```html
+<td>
+    <span class="badge badge-info">{{ product.product.added_by_merchant.company_name }}</span>
+</td>
+```
+
+### Implementation Details
+- Column added to product list template
+- Uses Django template syntax to render merchant information
+- No additional backend changes required
