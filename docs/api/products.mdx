@@ -1,30 +1,43 @@
-## Product Rating
+# Product Ratings API
 
-### Average Rating Field
+## Overview
+Products in our e-commerce platform now support an `average_rating` feature that automatically calculates and updates product ratings based on user reviews.
 
-The `Products` model includes an `average_rating` field that automatically calculates the average rating from product reviews.
+## Fields
 
-#### Field Specifications
-- **Type**: DecimalField
-- **Max Digits**: 3
-- **Decimal Places**: 2
-- **Default**: 0.0
-- **Nullable**: Yes
+### Products Model
+- `average_rating` (DecimalField)
+  - Precision: 3 total digits, 2 decimal places
+  - Represents the average rating of all active product reviews
+  - Defaults to `0.0` when no reviews exist
 
-#### Calculation Logic
-- Automatically updates when product reviews are added, updated, or deleted
-- Only considers active reviews (is_active=1)
-- Fallback method `dynamic_average_rating` calculates rating on-the-fly if the stored field is None
+## Rating Calculation
 
-#### Example Usage
+### Automatic Updates
+- Ratings are automatically updated whenever:
+  - A new review is added
+  - An existing review is modified
+  - A review is deleted
+
+### Calculation Method
+- Only active reviews (with `is_active = 1`) are considered
+- Ratings are calculated by:
+  1. Summing all active review ratings
+  2. Dividing by the number of active reviews
+  3. Rounding to 2 decimal places
+
+### Dynamic Fallback
+A `dynamic_average_rating` property is available to calculate ratings on-the-fly if needed.
+
+## Example
+
 ```python
-# Get product average rating
-product = Product.objects.get(id=1)
+# Retrieving product rating
+product = Products.objects.get(id=1)
 print(product.average_rating)  # Stored average rating
-print(product.dynamic_average_rating)  # On-the-fly calculated rating
+print(product.dynamic_average_rating)  # Calculated average rating
 ```
 
-#### Behavior Notes
-- New products start with 0.0 average rating
-- Rating is rounded to 2 decimal places
-- Inactive reviews are excluded from rating calculation
+## Notes
+- Initial rating is always `0.0`
+- Inactive reviews are not included in rating calculations
