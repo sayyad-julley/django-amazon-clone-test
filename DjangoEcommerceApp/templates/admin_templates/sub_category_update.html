@@ -27,6 +27,9 @@ Sub Category Update
             <label>{{ field.label }}{% if field.field.required %} <span style="color: red;">*</span>{% endif %}</label>
             {% if field.field.widget.input_type != "select" %}
             <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.name }}" class="form-control" value="{{ field.value }}" {% if field.field.required %}required{% endif %}>
+            {% if field.name == 'url_slug' %}
+            <small class="form-text text-muted">Use lowercase letters, numbers, and hyphens only</small>
+            {% endif %}
             {% endif %}
 
             {% if field.field.widget.input_type == "select" %}

@@ -27,6 +27,9 @@ Category Create
             <label>{{ field.label }}{% if field.field.required %} <span style="color: red;">*</span>{% endif %}</label>
 
             <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.name }}" class="form-control" {% if field.field.required %}required{% endif %}>
+            {% if field.name == 'url_slug' %}
+            <small class="form-text text-muted">Use lowercase letters, numbers, and hyphens only</small>
+            {% endif %}
 
             {% if field.errors %}
             <div class="alert alert-danger" style="margin:10px">
