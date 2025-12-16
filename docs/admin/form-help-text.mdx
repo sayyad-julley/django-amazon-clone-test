@@ -1,25 +1,27 @@
 ---
-title: Form Help Text Implementation
-description: Adding descriptive help text to form inputs for better user guidance
+title: Admin Form Help Text
+description: Guide to help text in admin form fields
 ---
 
-## Form Help Text Update
+## Form Field Help Text
 
-In this update, we added help text to various form input fields to provide users with clearer guidance on how to fill out the forms.
+In the Django Amazon Clone project, we've added helpful hint text to various admin form fields to guide users on what information to enter:
 
-### Changes Made
-- Added help text for `url_slug` fields across category and subcategory forms
-- Added help text for `product_name` and `brand` fields in product forms
+### Category and Subcategory Forms
+- **URL Slug Field**: 
+  - Help Text: "Use lowercase letters, numbers, and hyphens only"
+  - Purpose: Ensure consistent and URL-friendly slug creation
 
-### Specific Help Text Examples
-- `url_slug`: "Use lowercase letters, numbers, and hyphens only"
-- `product_name`: "Enter the full product name as it should appear to customers"
-- `brand`: "Enter the manufacturer or brand name"
+### Product Forms
+- **Product Name Field**:
+  - Help Text: "Enter the full product name as it should appear to customers"
+  - Purpose: Ensure accurate and complete product naming
 
-### Benefits
-- Improves user understanding of input requirements
-- Reduces potential user errors
-- Provides context for form fields
+- **Brand Field**:
+  - Help Text: "Enter the manufacturer or brand name"
+  - Purpose: Clarify the type of information required in the brand field
 
-### Implementation Details
-The help text was added using `<small class="form-text text-muted">` tags, which provide a subtle, muted styling that doesn't distract from the main form interface.
+## Implementation Details
+- Help text is implemented using the `<small class="form-text text-muted">` HTML element
+- Positioned directly below the corresponding input field
+- Uses a muted/grey color to provide guidance without being too intrusive
