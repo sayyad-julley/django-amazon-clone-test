@@ -11,6 +11,7 @@ The `Products` model now includes an `average_rating` field that automatically c
 - Calculated from active product reviews (`is_active=1`)
 - Uses `calculate_average_rating()` method which can be called on-demand
 - Provides a `dynamic_average_rating` property for real-time rating retrieval
+- Signal handlers update the rating whenever reviews change
 
 ### Example Usage
 ```python
@@ -21,6 +22,11 @@ current_rating = product.average_rating  # Returns current stored rating
 # Get dynamic rating calculation
 live_rating = product.dynamic_average_rating  # Calculates rating on-the-fly
 ```
+
+### Performance Considerations
+- The `average_rating` field is pre-calculated and stored for performance
+- `dynamic_average_rating` provides a fallback for real-time calculations
+- Signal handlers ensure the stored rating is always up-to-date
 
 ### Admin Interface
 - The average rating is read-only in the admin interface
