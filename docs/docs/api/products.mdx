@@ -1,50 +1,36 @@
----
-title: 'Products API'
-description: 'API documentation for product management, including product rating functionality'
----
-
-## Product Rating
+## Product Rating Field
 
 ### Overview
-The product rating system allows tracking and calculating the average rating for each product based on customer reviews.
+The `average_rating` field provides an automatically calculated average rating for products based on customer reviews.
 
-### Rating Field
-- `average_rating`: DecimalField 
-  - Max digits: 3
-  - Decimal places: 2
-  - Default: 0.0
-  - Automatically updated on review changes
+### Field Specification
+- **Type**: DecimalField
+- **Max Digits**: 3
+- **Decimal Places**: 2
+- **Default**: 0.0
 
-### Calculation Mechanism
-- Ratings are calculated from active product reviews
-- Inactive reviews are excluded from rating calculations
-- Precision maintained to 2 decimal places
-- Ratings are automatically updated when:
-  - A review is created
-  - A review is updated
-  - A review is deleted
+### Calculation Method
+- Calculated from active product reviews (reviews with `is_active=True`)
+- Dynamically updates on review creation, modification, or deletion
+- Handles edge cases such as no reviews gracefully
 
-### Retrieval Methods
-
-#### Direct Field Access
+### Usage Example
 ```python
-product = Products.objects.get(id=1)
-rating = product.average_rating  # Returns cached rating
+# Retrieve a product's rating
+product = Product.objects.get(id=1)
+print(product.average_rating)  # Displays pre-calculated rating
+print(product.dynamic_average_rating)  # Re-calculates if stored rating is None
+
+# The rating is automatically updated when reviews are added/modified
+review = ProductReview.objects.create(
+    product=product,
+    customer=user,
+    rating=4.5
+)
+# product.average_rating will be automatically updated
 ```
 
-#### Dynamic Calculation
-```python
-product = Products.objects.get(id=1)
-current_rating = product.dynamic_average_rating  # Always calculates latest rating
-```
-
-### Test Coverage
-Comprehensive test cases cover:
-- Initial state rating
-- Rating calculation with multiple reviews
-- Handling of active and inactive reviews
-- Precision of rating computation
-
-### Behavioral Notes
-- If no active reviews exist, the rating defaults to 0.0
-- The system ensures real-time rating updates on review changes
+### Performance Considerations
+- Rating is pre-calculated for optimal query performance
+- Fallback dynamic calculation method provides flexibility
+- Utilizes Django signals for real-time updates
