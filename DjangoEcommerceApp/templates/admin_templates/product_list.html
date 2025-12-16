@@ -16,14 +16,12 @@ Product List
     <div class="col-lg-12">
         <div class="search-element">
         <div class="card">
-                  
                   <div class="card-body">
                   <form method="get">
-                    <button class="btn  btn-primary" type="submit" style="float:right"><i class="fas fa-search"></i> Search</button>
+                    <button class="btn btn-primary" type="submit" style="float:right"><i class="fas fa-search"></i> Search</button>
                     <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="250" style="width: 250px;float:right" name="filter" value="{{ filter }}">
                    </form>
                   </div>
-                  
                 </div>
         </div>
     </div>
@@ -32,12 +30,19 @@ Product List
     <div class="col-lg-12">
         <div class="search-element">
         <div class="card">
-                  
             <div class="card-body">
                 <b>Sort By : - </b>
-                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=id">ID</a>  | 
-                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=product_name">Title</a> |  
-                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=product_description">Description</a> 
+                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=id">ID</a>  |
+                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=product_name">Title</a> |
+                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=product_description">Description</a>
+                <form id="bulk-action-form" method="post" action="{% url 'product_bulk_action' %}">
+                    {% csrf_token %}
+                    <div class="bulk-actions mt-2">
+                        <input type="checkbox" id="selectAll" onclick="toggleAllProducts(this)">
+                        <label for="selectAll">Select All</label>
+                        <button type="submit" class="btn btn-danger ml-2">Bulk Delete</button>
+                    </div>
+                </form>
             </div>
         </div>
         </div>
@@ -59,6 +64,9 @@ Product List
         <p>{{ subcategory.description }}</p>
         <p><span class="badge badge-warning">Url Slug : {{ product.product.url_slug }}</span></p>
         <div class="article-cta">
+            <div class="bulk-select-container">
+                <input type="checkbox" name="product_ids" value="{{ product.product.id }}" class="product-checkbox" form="bulk-action-form">
+            </div>
             <label class="custom-switch mt-2" style="float:left">
                         <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" {% if product.product.is_active == 1 %}checked{% endif %}>
                         <span class="custom-switch-indicator"></span>
@@ -107,4 +115,12 @@ Product List
 
 
 {% block custom_js %}
+<script>
+function toggleAllProducts(source) {
+    var checkboxes = document.getElementsByClassName('product-checkbox');
+    for(var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+</script>
 {% endblock custom_js %}
