@@ -1,40 +1,30 @@
-## Product Rating Field
+## Product Rating
 
-The `Products` model now includes an `average_rating` field that automatically calculates and updates the average rating from `ProductReviews`.
+### Average Rating Field
 
-### Field Specification
-- Type: `DecimalField`
-- Max Digits: 3
-- Decimal Places: 2
-- Can be `null` or `blank`
+The `Products` model includes an `average_rating` field that automatically calculates the average rating from product reviews.
 
-### Calculation Method
-1. The rating is automatically updated whenever a review is:
-   - Created
-   - Updated
-   - Deleted
+#### Field Specifications
+- **Type**: DecimalField
+- **Max Digits**: 3
+- **Decimal Places**: 2
+- **Default**: 0.0
+- **Nullable**: Yes
 
-2. A dynamic property `dynamic_average_rating` is also available to calculate the rating on-the-fly.
+#### Calculation Logic
+- Automatically updates when product reviews are added, updated, or deleted
+- Only considers active reviews (is_active=1)
+- Fallback method `dynamic_average_rating` calculates rating on-the-fly if the stored field is None
 
-### Example
+#### Example Usage
 ```python
-# Creating a product
-product = Products.objects.create(...)
-
-# Checking average rating
-print(product.average_rating)  # 0.0 initially
-print(product.dynamic_average_rating)  # 0.0 initially
-
-# Adding reviews
-ProductReviews.objects.create(product_id=product, rating=4.5)
-ProductReviews.objects.create(product_id=product, rating=5.0)
-
-# Rating will be automatically updated
-print(product.average_rating)  # 4.75
-print(product.dynamic_average_rating)  # 4.75
+# Get product average rating
+product = Product.objects.get(id=1)
+print(product.average_rating)  # Stored average rating
+print(product.dynamic_average_rating)  # On-the-fly calculated rating
 ```
 
-### Notes
-- Ratings are rounded to 2 decimal places
-- If no active reviews exist, the rating defaults to 0.0
-- The rating updates are handled by Django signals
+#### Behavior Notes
+- New products start with 0.0 average rating
+- Rating is rounded to 2 decimal places
+- Inactive reviews are excluded from rating calculation
