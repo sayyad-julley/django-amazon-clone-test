@@ -359,3 +359,7 @@
 2025-12-15 18:29:38,412 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
 2025-12-15 18:29:38,412 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 1s
 2025-12-15 18:29:39,514 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-16 08:12:27,445 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/5, Window: 60s
+2025-12-16 08:12:27,445 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/5, Window: 60s
+2025-12-16 08:12:27,838 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/5, Window: 60s
+2025-12-16 08:12:27,838 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/5, Window: 60s

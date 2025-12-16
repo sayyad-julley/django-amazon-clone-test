@@ -90,8 +90,8 @@ class Products(models.Model):
     average_rating = models.DecimalField(
         max_digits=3,
         decimal_places=2,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         default=0.0,
         help_text='Automatically calculated average rating from product reviews'
     )
@@ -112,14 +112,17 @@ class Products(models.Model):
     @property
     def dynamic_average_rating(self):
         """
-        Calculate average rating on-the-fly from active reviews.
+        Calculate average rating on-the-fly or return existing average_rating.
+        Falls back to on-the-fly calculation if no reviews.
         """
-        return self.calculate_average_rating()
+        return self.average_rating or self.calculate_average_rating()
 
     def save(self, *args, **kwargs):
         """
         Update average rating based on active reviews during save.
         """
+        if self.average_rating is None:
+            self.average_rating = self.calculate_average_rating()
         super().save(*args, **kwargs)
 
 class ProductMedia(models.Model):

@@ -1,43 +1,28 @@
-# Product Ratings API
+## Product Rating
 
-## Overview
-Products in our e-commerce platform now support an `average_rating` feature that automatically calculates and updates product ratings based on user reviews.
+The `Products` model now includes an `average_rating` field that automatically calculates and tracks the average rating for a product based on its reviews.
 
-## Fields
-
-### Products Model
-- `average_rating` (DecimalField)
-  - Precision: 3 total digits, 2 decimal places
-  - Represents the average rating of all active product reviews
-  - Defaults to `0.0` when no reviews exist
-
-## Rating Calculation
-
-### Automatic Updates
-- Ratings are automatically updated whenever:
-  - A new review is added
-  - An existing review is modified
-  - A review is deleted
+### Field Details
+- `average_rating`: Decimal field (max_digits=3, decimal_places=2)
+- Defaults to 0.0 when no reviews exist
+- Automatically updated when product reviews are added, updated, or deleted
 
 ### Calculation Method
-- Only active reviews (with `is_active = 1`) are considered
-- Ratings are calculated by:
-  1. Summing all active review ratings
-  2. Dividing by the number of active reviews
-  3. Rounding to 2 decimal places
+- Calculated from active product reviews (`is_active=1`)
+- Uses `calculate_average_rating()` method which can be called on-demand
+- Provides a `dynamic_average_rating` property for real-time rating retrieval
 
-### Dynamic Fallback
-A `dynamic_average_rating` property is available to calculate ratings on-the-fly if needed.
-
-## Example
-
+### Example Usage
 ```python
-# Retrieving product rating
+# Get a product's current average rating
 product = Products.objects.get(id=1)
-print(product.average_rating)  # Stored average rating
-print(product.dynamic_average_rating)  # Calculated average rating
+current_rating = product.average_rating  # Returns current stored rating
+
+# Get dynamic rating calculation
+live_rating = product.dynamic_average_rating  # Calculates rating on-the-fly
 ```
 
-## Notes
-- Initial rating is always `0.0`
-- Inactive reviews are not included in rating calculations
+### Admin Interface
+- The average rating is read-only in the admin interface
+- Displayed in the product list view
+- Automatically updated by signal handlers
