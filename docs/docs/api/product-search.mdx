@@ -1,0 +1,52 @@
+---
+title: 'Product Search Functionality'
+description: 'Enhanced search capabilities for product management'
+---
+
+## Product Search API
+
+The product search functionality allows for flexible, case-insensitive searching across multiple product fields.
+
+### Search Parameters
+
+- `q`: The search query parameter
+- Supports case-insensitive, partial matching across:
+  - Product Name
+  - Brand
+  - Product Description
+
+### Search Behavior
+
+- **Case Insensitivity**: Search is not affected by letter case
+  - Example: "Nike", "NIKE", "nike" will all return Nike products
+
+- **Partial Matching**: Searches match partial strings
+  - Example: "run" will match products with running in the description
+
+### Example Queries
+
+```python
+# Search by partial product name
+GET /admin/products/?q=air
+
+# Search by brand
+GET /admin/products/?q=Nike
+
+# Search by description keyword
+GET /admin/products/?q=cushioning
+```
+
+### Response
+
+- Returns matching products
+- Sorted by most recently created first
+- Paginated (10 products per page)
+
+### Permissions
+
+- Only accessible to staff or superuser accounts
+
+### Error Handling
+
+- Empty search returns all products
+- No matching products returns an empty list

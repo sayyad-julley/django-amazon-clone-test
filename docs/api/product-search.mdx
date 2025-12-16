@@ -1,0 +1,43 @@
+---
+title: 'Product Search Functionality'
+description: 'Enhanced search capabilities for product listing'
+---
+
+## Overview
+The Product Search functionality provides a robust way to search and filter products across multiple attributes.
+
+## Search Features
+- **Supported Fields**: 
+  - Product Name
+  - Brand
+  - Product Description
+
+### Search Capabilities
+- **Case Insensitive**: Search terms match regardless of capitalization
+- **Partial Matching**: Supports partial search terms
+
+## Search Query Examples
+
+### Basic Search
+```python
+# Search for products containing 'nike' (case-insensitive)
+ProductListView.get_queryset(filter='nike')
+```
+
+### Advanced Search Scenarios
+```python
+# Will match products with name, brand, or description containing 'shirt'
+ProductListView.get_queryset(filter='shirt')
+
+# Will find Nike products, matching 'Nike', 'nike', or 'NIKE'
+ProductListView.get_queryset(filter='Nike')
+```
+
+## Performance Considerations
+- Search queries use Django's `Q` objects for efficient database lookups
+- Utilizes `icontains` for case-insensitive, partial matching
+- Maintains pagination and sorting functionality during search
+
+## Best Practices
+- Use concise, meaningful search terms
+- Combine search with sorting for more precise results

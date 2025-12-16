@@ -23,5 +23,12 @@ from django.urls import include
 from DjangoEcommerce import settings
 
 urlpatterns = [
-    path('admindashboard/',include("DjangoEcommerceApp.adminurls"))
+    path('admindashboard/', include("DjangoEcommerceApp.adminurls")),
+    path('products/', include("products.urls")),
+    path('auth/login/', views.adminLogin, name='admin_login'),
+    path('auth/login/process/', views.adminLoginProcess, name='admin_login_process'),
+    path('auth/logout/', views.adminLogoutProcess, name='admin_logout'),
+    path('auth/register/', views.adminRegistration, name='admin_register'),
+    path('auth/password-reset/', views.adminPasswordReset, name='admin_password_reset'),
+    path('', views.demoPage, name='home')
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

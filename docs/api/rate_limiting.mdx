@@ -1,0 +1,75 @@
+---
+title: 'API Rate Limiting'
+description: 'Enhanced security through intelligent request rate limiting'
+---
+
+## Overview
+
+Rate limiting is a critical security mechanism that protects our authentication and registration endpoints from potential abuse, brute-force attacks, and unintended system overload.
+
+## Rate Limit Configurations
+
+Our rate limiting strategy provides granular control across different authentication endpoints:
+
+### Login Endpoint
+- **Maximum Requests**: 5 requests per minute
+- **Scope**: Per IP address
+- **Mechanism**: Progressive delay with exponential backoff
+- **Response**: 
+  - HTTP 429 (Too Many Requests) when limit is exceeded
+  - `Retry-After` header indicates delay before next attempt
+
+### Registration Endpoint
+- **Maximum Requests**: 3 requests per 5 minutes
+- **Scope**: Per IP address
+- **Mechanism**: Progressive delay to prevent mass account creation
+- **Response**: 
+  - HTTP 429 (Too Many Requests) when limit is exceeded
+  - `Retry-After` header indicates delay before next attempt
+
+### Response Headers
+
+All rate-limited responses include informative headers:
+- `X-RateLimit-Limit`: Maximum allowed requests
+- `X-RateLimit-Remaining`: Remaining requests in current window
+- `Retry-After`: Seconds to wait before next request
+
+## Implementation Details
+
+### IP-Based Tracking
+- Supports both IPv4 and IPv6 addresses
+- Multiple proxy header detection (X-Forwarded-For, X-Real-IP)
+- Normalization to prevent bypass attempts
+
+### Progressive Delay Mechanism
+The delay between requests increases exponentially after repeated violations:
+1. First violation: Immediate retry allowed
+2. Subsequent violations: Increasing wait times
+3. Maximum delay: 1 hour
+
+## Best Practices
+
+1. Handle rate limit responses gracefully in client applications
+2. Implement client-side backoff and retry logic
+3. Log and monitor rate limit events for security insights
+
+## Example Client Handling
+
+```python
+def login_with_retry(username, password):
+    try:
+        response = login_api_call(username, password)
+    except RateLimitError as e:
+        retry_after = e.headers.get('Retry-After')
+        time.sleep(int(retry_after))
+        # Retry login after specified delay
+        response = login_api_call(username, password)
+```
+
+## Security Considerations
+
+- Rate limiting helps prevent:
+  - Brute-force password attempts
+  - Credential stuffing attacks
+  - Account enumeration
+  - Denial of Service (DoS) attacks

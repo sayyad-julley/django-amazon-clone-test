@@ -1,0 +1,87 @@
+# API Rate Limiting
+
+## Overview
+The project implements a comprehensive rate limiting strategy to protect authentication endpoints from potential abuse and brute-force attacks.
+
+## Rate Limiting Decorator
+
+### `enhanced_rate_limit`
+A flexible rate limiting decorator with configurable parameters:
+
+```python
+def enhanced_rate_limit(
+    max_requests: int = 10,
+    window_seconds: int = 60,
+    key_prefix: str = 'rate_limit',
+    error_message: str = 'Too many requests. Please try again later.',
+    progressive_delay: bool = False
+) -> Callable
+```
+
+#### Parameters
+- `max_requests`: Maximum number of requests allowed in the window
+- `window_seconds`: Time window in seconds
+- `key_prefix`: Unique identifier for different rate limit groups
+- `error_message`: Custom error message for rate limit violations
+- `progressive_delay`: Enable exponential backoff for repeated violations
+
+### Predefined Rate Limit Configurations
+
+#### Strict Authentication Rate Limit
+- Limit: 5 requests per minute
+- Progressive delay enabled
+- Used for sensitive authentication endpoints
+
+```python
+@strict_auth_rate_limit
+def admin_login_process(request):
+    # Login logic
+```
+
+#### Standard API Rate Limit
+- Limit: 10 requests per minute
+- No progressive delay
+- Used for general API endpoints
+
+```python
+@standard_api_rate_limit
+def api_endpoint(request):
+    # API logic
+```
+
+## IP Detection Strategy
+The rate limiter uses a robust IP detection mechanism with multiple fallback headers:
+1. X-Forwarded-For
+2. HTTP_X_REAL_IP (Nginx)
+3. REMOTE_ADDR
+
+## Error Handling
+When rate limit is exceeded:
+- Returns HTTP 429 (Too Many Requests)
+- Includes headers:
+  - `Retry-After`: Seconds to wait before next request
+  - `X-RateLimit-Limit`: Maximum allowed requests
+  - `X-RateLimit-Remaining`: Remaining requests in current window
+  - `X-RateLimit-Reset`: Timestamp of window reset
+
+## Logging
+- Logs rate limit events to console and file
+- Captures IP address, request count, and violation details
+- Log file: `rate_limit.log`
+
+### Log Entry Example
+```
+2025-12-15 07:38:28 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 5, Window: 60s, Violations: 1
+```
+
+## Security Considerations
+- Handles IPv4 and IPv6 addresses
+- Prevents IP spoofing through normalization
+- Optional progressive delay to mitigate repeated attacks
+- Configurable per-endpoint rate limits
+
+## Best Practices
+- Configure rate limits based on endpoint sensitivity
+- Monitor and adjust limits as needed
+- Review rate limit logs for potential security insights
+- Use progressive delay to deter brute-force attempts

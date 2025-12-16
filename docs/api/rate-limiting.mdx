@@ -1,0 +1,61 @@
+---
+title: 'API Rate Limiting'
+description: 'Comprehensive rate limiting strategy for authentication endpoints'
+---
+
+## Authentication Rate Limiting
+
+Our Django application implements a robust, multi-layered rate limiting strategy to protect authentication endpoints from abuse and potential brute-force attacks.
+
+### Key Features
+
+- **IP-Based Tracking**: Rate limits are enforced at the IP address level
+- **Progressive Delay**: Exponential backoff for repeated violations
+- **Granular Endpoint Controls**: Different rate limits for various authentication actions
+
+### Rate Limit Configurations
+
+#### Login Endpoint
+- **Limit**: 5 requests per minute
+- **Behavior**: Progressive delay increases with repeated violations
+- **Error Response**: 429 Too Many Requests with detailed headers
+
+#### Registration Endpoint
+- **Limit**: 3 requests per 5 minutes
+- **Behavior**: Progressive delay to prevent mass registrations
+- **Error Response**: 429 Too Many Requests with retry guidance
+
+#### Password Reset Endpoint
+- **Limit**: 2 requests per hour
+- **Behavior**: Strict rate limiting to prevent password reset abuse
+- **Error Response**: 429 Too Many Requests with support contact suggestion
+
+### Response Headers
+
+When rate limit is exceeded, responses include:
+- `Retry-After`: Seconds to wait before next attempt
+- `X-RateLimit-Limit`: Maximum allowed requests
+- `X-RateLimit-Remaining`: Remaining requests in current window
+- `X-RateLimit-Reset`: Timestamp when limit resets
+
+### Implementation Details
+
+Rate limiting is implemented using Django's cache and a custom decorator `enhanced_rate_limit()`. 
+This allows for flexible, configurable rate limiting across different endpoints.
+
+```python
+@strict_auth_rate_limit  # 5 requests per minute with progressive delay
+@rest_auth_rate_limit   # Adds additional API-level rate limiting
+def adminLoginProcess(request):
+    # Authentication logic here
+```
+
+### Logging
+
+All rate limit events are logged with:
+- Timestamp
+- Client IP
+- Number of requests
+- Violation details
+
+Logs are written to `rate_limit.log` for monitoring and analysis.

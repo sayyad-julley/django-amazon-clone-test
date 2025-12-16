@@ -258,19 +258,32 @@ def file_upload(request):
     return HttpResponse('{"location":"'+BASE_URL+''+file_url+'"}')
 
 
-class ProductListView(ListView):
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class ProductListView(LoginRequiredMixin, ListView):
+    login_url = '/admin/login/'
     model=Products
     template_name="admin_templates/product_list.html"
+    def get_template_names(self):
+        return [
+            'admin_templates/product_list.html',
+            'products/product_list.html',
+            'product_list.html'
+        ]
     paginate_by=3
 
     def get_queryset(self):
         filter_val=self.request.GET.get("filter","")
         order_by=self.request.GET.get("orderby","id")
         if filter_val!="":
-            products=Products.objects.filter(Q(product_name__contains=filter_val) | Q(product_description__contains=filter_val)).order_by(order_by)
+            products=Products.objects.filter(
+                Q(product_name__icontains=filter_val) |
+                Q(product_description__icontains=filter_val) |
+                Q(brand__icontains=filter_val)
+            ).order_by(order_by)
         else:
             products=Products.objects.all().order_by(order_by)
-        
+
         product_list=[]
         for product in products:
             product_media=ProductMedia.objects.filter(product_id=product.id,media_type=1,is_active=1).first()
