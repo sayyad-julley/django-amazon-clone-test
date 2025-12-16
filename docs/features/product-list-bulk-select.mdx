@@ -1,0 +1,44 @@
+---
+title: Bulk Product Selection in Product List
+description: Feature for selecting multiple products simultaneously in the admin product list
+---
+
+## Product List Bulk Selection
+
+### Overview
+The product list page now supports bulk selection of products using a "Select All" checkbox.
+
+### Features
+- A "Select All Products" checkbox in the product list header
+- Individual checkboxes for each product
+- Ability to check/uncheck all products with a single click
+
+### Usage
+1. Navigate to the Product List page in the admin interface
+2. Use the "Select All Products" checkbox to quickly select or deselect all products
+3. Alternatively, select individual products as needed
+
+### Implementation Details
+- Located in: `DjangoEcommerceApp/templates/admin_templates/product_list.html`
+- Implemented using vanilla JavaScript event listeners
+- Uses Bootstrap custom checkbox styling
+
+### Example
+```html
+<!-- Select All Checkbox -->
+<div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" id="selectAllProducts">
+    <label class="custom-control-label" for="selectAllProducts">Select All Products</label>
+</div>
+
+<!-- Individual Product Checkbox -->
+<div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input product-checkbox" 
+           id="product_{{ product.id }}"
+           name="product_ids"
+           value="{{ product.id }}">
+    <label class="custom-control-label" for="product_{{ product.id }}">
+        Select Product
+    </label>
+</div>
+```
