@@ -3,16 +3,20 @@ from django.dispatch import receiver
 from .models import ProductReviews, Products
 
 def update_product_rating(product):
-    """Helper function to update product's average rating"""
-    reviews = ProductReviews.objects.filter(product_id=product, is_active=1)
+    """
+    Helper function to update product's average rating
+    Calculates the average rating from active reviews and saves to the product
+    """
+    active_reviews = ProductReviews.objects.filter(product_id=product, is_active=1)
 
-    if reviews.exists():
-        total_rating = sum(review.rating for review in reviews)
-        product.average_rating = round(total_rating / reviews.count(), 2)
+    if active_reviews.exists():
+        total_rating = sum(float(review.rating) for review in active_reviews)
+        average_rating = round(total_rating / active_reviews.count(), 2)
     else:
-        product.average_rating = 0.0
+        average_rating = 0.0
 
-    product.save(update_fields=['average_rating'])
+    # Directly update average_rating field
+    Products.objects.filter(pk=product.pk).update(average_rating=average_rating)
 
 @receiver(post_save, sender=ProductReviews)
 def update_rating_on_review_save(sender, instance, created, **kwargs):

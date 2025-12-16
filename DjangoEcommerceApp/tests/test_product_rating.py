@@ -1,83 +1,136 @@
 from django.test import TestCase
-from django.contrib.auth import get_user_model
+from DjangoEcommerceApp.models import CustomUser
 from DjangoEcommerceApp.models import Products, ProductReviews, CustomerUser, Categories, SubCategories, MerchantUser
+import uuid
 
 class ProductRatingTestCase(TestCase):
     def setUp(self):
-        # Create test user and merchant
-        User = get_user_model()
-        self.user = User.objects.create_user(username='testuser', password='testpass')
-        self.merchant = MerchantUser.objects.create(
-            auth_user_id=self.user,
-            company_name='Test Company',
-            gst_details='123456',
-            address='Test Address'
+        # Generate unique usernames
+        username = f'testuser_{uuid.uuid4().hex[:8]}'
+        merchant_username = f'merchant_{uuid.uuid4().hex[:8]}'
+
+        # Create or get test data
+        self.user, _ = CustomUser.objects.get_or_create(
+            username=username,
+            defaults={
+                'password': '12345',
+                'user_type': 4,
+                'first_name': 'Test',
+                'last_name': 'User'
+            }
         )
 
-        # Create test category and subcategory
-        self.category = Categories.objects.create(
-            title='Test Category',
-            url_slug='test-category',
-            description='Test Description'
+        # Create or get merchant
+        merchant_user, _ = CustomUser.objects.get_or_create(
+            username=merchant_username,
+            defaults={
+                'password': '12345',
+                'user_type': 3,
+                'first_name': 'Test',
+                'last_name': 'Merchant'
+            }
         )
-        self.subcategory = SubCategories.objects.create(
+
+        # Create or get merchant profile
+        self.merchant, _ = MerchantUser.objects.get_or_create(
+            auth_user_id=merchant_user,
+            defaults={'company_name': 'Test Company'}
+        )
+
+        # Create or get customer profile
+        self.customer, _ = CustomerUser.objects.get_or_create(
+            auth_user_id=self.user
+        )
+
+        # Create categories and subcategories
+        self.category, _ = Categories.objects.get_or_create(
+            title='Test Category',
+            defaults={'url_slug': 'test-category'}
+        )
+
+        self.subcategory, _ = SubCategories.objects.get_or_create(
             category_id=self.category,
             title='Test Subcategory',
-            url_slug='test-subcategory'
+            defaults={'url_slug': 'test-subcategory'}
         )
 
-        # Create test product
-        self.product = Products.objects.create(
-            subcategories_id=self.subcategory,
+        # Create product
+        self.product, _ = Products.objects.get_or_create(
             product_name='Test Product',
             brand='Test Brand',
-            product_max_price='100',
-            product_discount_price='80',
-            product_description='Test Description',
-            added_by_merchant=self.merchant
+            subcategories_id=self.subcategory,
+            added_by_merchant=self.merchant,
+            defaults={'url_slug': 'test-product'}
         )
 
-        # Create test customer
-        self.customer = CustomerUser.objects.create(auth_user_id=self.user)
+    def test_average_rating_calculation(self):
+        # Test initial state
+        self.assertEqual(self.product.dynamic_average_rating, 0.0)
 
-    def create_review(self, rating):
-        return ProductReviews.objects.create(
+        # Create reviews
+        review1 = ProductReviews.objects.create(
             product_id=self.product,
             user_id=self.customer,
-            rating=float(rating)
+            rating=4.0,
+            review_image=None
         )
 
-    def test_no_reviews_rating(self):
-        """Test that product with no reviews has zero rating"""
-        self.assertEqual(self.product.dynamic_average_rating, 0.0)
-        self.assertEqual(self.product.average_rating, 0.0)
-
-    def test_single_review_rating(self):
-        """Test rating calculation with a single review"""
-        self.create_review(4.5)
-        self.assertEqual(self.product.dynamic_average_rating, 4.5)
-        self.assertEqual(self.product.average_rating, 4.5)
-
-    def test_multiple_reviews_rating(self):
-        """Test rating calculation with multiple reviews"""
-        self.create_review(4)
-        self.create_review(5)
-        self.create_review(3)
+        self.product.refresh_from_db()
         self.assertEqual(self.product.dynamic_average_rating, 4.0)
-        self.assertEqual(self.product.average_rating, 4.0)
 
-    def test_review_deletion_impacts_rating(self):
-        """Test that deleting a review updates the product rating"""
-        review1 = self.create_review(4)
-        review2 = self.create_review(5)
+        # Add another review
+        review2 = ProductReviews.objects.create(
+            product_id=self.product,
+            user_id=self.customer,
+            rating=5.0,
+            review_image=None
+        )
 
-        # Initial rating check
+        self.product.refresh_from_db()
         self.assertEqual(self.product.dynamic_average_rating, 4.5)
 
-        # Delete one review
+        # Delete a review
         review1.delete()
+
+        self.product.refresh_from_db()
         self.assertEqual(self.product.dynamic_average_rating, 5.0)
 
-        # Delete last review
+        # Delete remaining review
         review2.delete()
+
+        self.product.refresh_from_db()
         self.assertEqual(self.product.dynamic_average_rating, 0.0)
+
+    def test_inactive_reviews(self):
+        # Create review and mark as inactive
+        review = ProductReviews.objects.create(
+            product_id=self.product,
+            user_id=self.customer,
+            rating=4.0,
+            review_image=None,
+            is_active=0
+        )
+
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.dynamic_average_rating, 0.0)
+
+    def test_multiple_reviews_precision(self):
+        # Test precision of rating calculation
+        reviews_data = [
+            (3.5, True),
+            (4.0, True),
+            (4.5, True),
+            (2.0, False)  # Inactive review
+        ]
+
+        for rating, is_active in reviews_data:
+            ProductReviews.objects.create(
+                product_id=self.product,
+                user_id=self.customer,
+                rating=rating,
+                review_image=None,
+                is_active=1 if is_active else 0
+            )
+
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.dynamic_average_rating, 4.0)

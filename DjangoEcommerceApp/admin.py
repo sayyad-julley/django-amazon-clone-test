@@ -12,7 +12,13 @@ class SubCategoriesAdmin(admin.ModelAdmin):
 
 @admin.register(Products)
 class ProductsAdmin(admin.ModelAdmin):
-    list_display = ('product_name', 'brand', 'average_rating', 'dynamic_average_rating')
+    list_display = ('product_name', 'brand', 'average_rating')
     list_filter = ('brand',)
     search_fields = ('product_name', 'brand')
     readonly_fields = ('average_rating', 'dynamic_average_rating')
+
+    def get_readonly_fields(self, request, obj=None):
+        """
+        Make average_rating read-only in the admin interface
+        """
+        return self.readonly_fields

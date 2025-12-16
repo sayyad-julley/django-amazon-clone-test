@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.urls import reverse
 
 # Create your models here.
@@ -11,16 +11,19 @@ class CustomUser(AbstractUser):
 
 
 class AdminUser(models.Model):
+    id = models.BigAutoField(primary_key=True)
     profile_pic=models.FileField(default="")
     auth_user_id=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
 
 class StaffUser(models.Model):
+    id = models.BigAutoField(primary_key=True)
     profile_pic=models.FileField(default="")
     auth_user_id=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
 
 class MerchantUser(models.Model):
+    id = models.BigAutoField(primary_key=True)
     auth_user_id=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     profile_pic=models.FileField(default="")
     company_name=models.CharField(max_length=255)
@@ -28,10 +31,10 @@ class MerchantUser(models.Model):
     address=models.TextField()
     is_added_by_admin=models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
-    objects=models.Manager()
 
 
 class CustomerUser(models.Model):
+    id = models.BigAutoField(primary_key=True)
     auth_user_id=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     profile_pic=models.FileField(default="")
     created_at=models.DateTimeField(auto_now_add=True)
@@ -84,29 +87,40 @@ class Products(models.Model):
     added_by_merchant=models.ForeignKey(MerchantUser,on_delete=models.CASCADE)
     in_stock_total=models.IntegerField(default=1)
     is_active=models.IntegerField(default=1)
-    average_rating=models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True)
+    average_rating = models.DecimalField(
+        max_digits=3,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        default=0.0,
+        help_text='Automatically calculated average rating from product reviews'
+    )
+
+    def calculate_average_rating(self):
+        """
+        Utility method to calculate average rating from reviews.
+        """
+        # Find active reviews for this product
+        reviews = ProductReviews.objects.filter(product_id=self, is_active=1)
+        if not reviews.exists():
+            return 0.0
+
+        # Calculate total rating
+        total_rating = sum(float(review.rating) for review in reviews)
+        return round(total_rating / reviews.count(), 2)
 
     @property
     def dynamic_average_rating(self):
         """
-        Calculate average rating on-the-fly.
-        This method ensures the average rating is always up-to-date.
+        Calculate average rating on-the-fly from active reviews.
         """
-        reviews = ProductReviews.objects.filter(product_id=self, is_active=1)
-        if not reviews.exists():
-            self.average_rating = 0.0
-            self.save()
-            return 0.0
+        return self.calculate_average_rating()
 
-        total_rating = sum(float(review.rating) for review in reviews)
-        calculated_rating = round(total_rating / reviews.count(), 2)
-
-        # Update the cached rating if it differs from the calculated rating
-        if self.average_rating != calculated_rating:
-            self.average_rating = calculated_rating
-            self.save()
-
-        return calculated_rating
+    def save(self, *args, **kwargs):
+        """
+        Update average rating based on active reviews during save.
+        """
+        super().save(*args, **kwargs)
 
 class ProductMedia(models.Model):
     id=models.AutoField(primary_key=True)
@@ -167,6 +181,31 @@ class ProductReviews(models.Model):
     review=models.TextField(default="")
     created_at=models.DateTimeField(auto_now_add=True)
     is_active=models.IntegerField(default=1)
+
+# Add signals to update average rating when reviews change
+@receiver(post_save, sender=ProductReviews)
+def update_product_average_rating(sender, instance, **kwargs):
+    """
+    Update the average rating of the associated product
+    whenever a product review is saved or modified.
+    """
+    if instance.is_active == 1:
+        product = instance.product_id
+        product.average_rating = product.calculate_average_rating()
+        product.save(update_fields=['average_rating'])
+
+@receiver(post_delete, sender=ProductReviews)
+def update_product_average_rating_on_delete(sender, instance, **kwargs):
+    """
+    Update the average rating of the associated product
+    whenever a product review is deleted.
+    """
+    try:
+        product = instance.product_id
+        product.average_rating = product.calculate_average_rating()
+        product.save(update_fields=['average_rating'])
+    except Products.DoesNotExist:
+        pass  # Product may have already been deleted
 
 class ProductReviewVoting(models.Model):
     id=models.AutoField(primary_key=True)

@@ -314,3 +314,48 @@
 2025-12-15 17:49:36,168 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
 2025-12-15 17:49:36,168 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 1s
 2025-12-15 17:49:37,270 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-15 18:14:33,151 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/1, Window: 60s
+2025-12-15 18:14:33,152 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 1, Window: 60s, Violations: 0
+2025-12-15 18:14:33,152 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 1, Window: 60s, Violations: 1
+2025-12-15 18:14:33,153 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 60s
+2025-12-15 18:14:33,153 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 60s
+2025-12-15 18:14:33,153 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 2, Window: 60s, Violations: N/A
+2025-12-15 18:14:33,154 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-15 18:14:33,154 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 1s
+2025-12-15 18:14:34,255 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-15 18:20:41,626 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/1, Window: 60s
+2025-12-15 18:20:41,627 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 1, Window: 60s, Violations: 0
+2025-12-15 18:20:41,627 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 1, Window: 60s, Violations: 1
+2025-12-15 18:20:41,628 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 60s
+2025-12-15 18:20:41,628 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 60s
+2025-12-15 18:20:41,628 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 2, Window: 60s, Violations: N/A
+2025-12-15 18:20:41,629 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-15 18:20:41,629 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 1s
+2025-12-15 18:20:42,733 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-15 18:22:36,202 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/1, Window: 60s
+2025-12-15 18:22:36,202 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 1, Window: 60s, Violations: 0
+2025-12-15 18:22:36,203 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 1, Window: 60s, Violations: 1
+2025-12-15 18:22:36,204 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 60s
+2025-12-15 18:22:36,204 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 60s
+2025-12-15 18:22:36,204 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 2, Window: 60s, Violations: N/A
+2025-12-15 18:22:36,205 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-15 18:22:36,205 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 1s
+2025-12-15 18:22:37,305 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-15 18:26:18,471 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/1, Window: 60s
+2025-12-15 18:26:18,471 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 1, Window: 60s, Violations: 0
+2025-12-15 18:26:18,471 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 1, Window: 60s, Violations: 1
+2025-12-15 18:26:18,472 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 60s
+2025-12-15 18:26:18,472 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 60s
+2025-12-15 18:26:18,472 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 2, Window: 60s, Violations: N/A
+2025-12-15 18:26:18,473 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-15 18:26:18,473 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 1s
+2025-12-15 18:26:19,574 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-15 18:29:38,410 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/1, Window: 60s
+2025-12-15 18:29:38,410 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 1, Window: 60s, Violations: 0
+2025-12-15 18:29:38,410 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 1, Window: 60s, Violations: 1
+2025-12-15 18:29:38,411 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 60s
+2025-12-15 18:29:38,411 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 60s
+2025-12-15 18:29:38,411 - rate_limiter - WARNING - Rate limit violation - IP: 127.0.0.1, Max Requests: 2, Window: 60s, Violations: N/A
+2025-12-15 18:29:38,412 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
+2025-12-15 18:29:38,412 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 2/2, Window: 1s
+2025-12-15 18:29:39,514 - rate_limiter - INFO - Rate limit check passed - IP: 127.0.0.1, Requests: 1/2, Window: 1s
