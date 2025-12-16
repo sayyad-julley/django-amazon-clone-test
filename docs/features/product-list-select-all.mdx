@@ -1,0 +1,25 @@
+# Product List Select All Functionality
+
+## Overview
+The product list page now includes a "Select All" checkbox feature that allows administrators to bulk select products in the table.
+
+## Usage
+1. In the product list page, locate the checkbox in the table header
+2. Click the checkbox to:
+   - Select all products when checked
+   - Deselect all products when unchecked
+3. The checkbox supports three states:
+   - Unchecked: No products selected
+   - Checked: All products selected
+   - Indeterminate: Some (but not all) products selected
+
+## Technical Implementation
+- Uses JavaScript `toggleAllProducts()` function for bulk selection
+- Implements `updateSelectAllCheckbox()` to handle partial selection states
+- Checkbox ID: `selectAllProducts`
+- Individual product checkboxes have name `product_ids`
+
+### Example
+```html
+<input type="checkbox" id="selectAllProducts" onclick="toggleAllProducts(this)">
+```
