@@ -1,0 +1,28 @@
+---
+title: Product List Page
+description: Overview of the product list page features and interactions
+---
+
+## Product List Page
+
+### Bulk Selection Feature
+
+The product list page now includes a "Select All" checkbox functionality, allowing administrators to quickly select or deselect all products in the list.
+
+#### Features
+- Checkbox in the table header labeled "Select All Products"
+- Individual checkboxes for each product
+- JavaScript-powered toggle that checks/unchecks all product checkboxes simultaneously
+
+#### Usage
+1. Click the "Select All Products" checkbox at the top of the list
+2. All product checkboxes will be checked or unchecked based on the header checkbox state
+3. You can also individually select or deselect products as needed
+
+#### Example
+```html
+<div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" id="selectAllProducts">
+    <label class="custom-control-label" for="selectAllProducts">Select All Products</label>
+</div>
+```
