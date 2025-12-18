@@ -1,0 +1,27 @@
+---
+title: Product Management Features
+description: New features and improvements in the product management interface
+---
+
+## Product List Enhancements
+
+### Copy Product ID Feature
+
+A new "Copy" button has been added next to each product's ID in the product list view. This feature allows administrators to quickly copy a product's unique identifier to the clipboard.
+
+#### How to Use
+- Navigate to the Product List page
+- Locate the product you're interested in
+- Click the "Copy" button next to the product's ID
+- A success alert will confirm that the ID has been copied to your clipboard
+
+#### Technical Details
+- Implemented using vanilla JavaScript
+- Uses the `navigator.clipboard` API for cross-browser compatibility
+- Provides immediate user feedback with an alert
+
+**Acceptance Criteria**:
+- ✓ "Copy" button appears next to each product ID
+- ✓ Clicking copy button copies ID to clipboard
+- ✓ Brief success message appears after copying
+- ✓ No breaking changes to existing functionality
