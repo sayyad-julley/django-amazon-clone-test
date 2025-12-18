@@ -32,9 +32,9 @@ Product List
         <div class="card">
             <div class="card-body">
                 <b>Sort By : - </b>
-                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=id">ID</a>  |
-                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=product_name">Title</a> |
-                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=product_description">Description</a>
+                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=id" class="{% if orderby == 'id' %}active-sort{% endif %}">ID</a>  |
+                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=product_name" class="{% if orderby == 'product_name' %}active-sort{% endif %}">Title</a> |
+                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=product_description" class="{% if orderby == 'product_description' %}active-sort{% endif %}">Description</a>
                 <form id="bulk-action-form" method="post" action="{% url 'product_bulk_action' %}">
                     {% csrf_token %}
                     <div class="bulk-actions mt-2">
