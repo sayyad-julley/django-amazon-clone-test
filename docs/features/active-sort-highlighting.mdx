@@ -1,0 +1,37 @@
+# Active Sort Option Highlighting
+
+## Overview
+This feature visually highlights the currently active sort option in list pages, providing users with clear feedback about the current sorting method.
+
+## Affected Pages
+- Category List
+- Subcategory List
+- Product List
+- Merchant List
+
+## Implementation Details
+- Added `active-sort` CSS class to dynamically highlight the active sort option
+- Uses Django template's `orderby` context variable to determine active sort
+- Styling includes:
+  - Increased font weight
+  - Underline text decoration
+  - Primary color emphasis
+
+## Example
+```html
+<a href="..." class="{% if orderby == 'title' %}active-sort{% endif %}">Title</a>
+```
+
+## CSS Styling
+```css
+.active-sort {
+  font-weight: 600;
+  text-decoration: underline;
+  color: #007bff;
+}
+```
+
+## Benefits
+- Improved user experience
+- Clear visual indication of current sorting method
+- No changes to existing sorting functionality
