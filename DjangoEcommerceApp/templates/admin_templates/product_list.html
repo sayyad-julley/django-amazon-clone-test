@@ -73,6 +73,9 @@ Product List
                         <span class="custom-switch-description">ACTIVE</span>
             </label>
             <a href="{% url 'product_edit' product_id=product.product.id %}" class="btn btn-warning ">EDIT <i class="fas fa-chevron-right"></i></a>
+            <a href="#" class="btn btn-info btn-sm" data-toggle="modal" data-target="#productModal{{ product.product.id }}">
+                Quick View <i class="fas fa-eye"></i>
+            </a>
             <div><br></div>
             <a href="{% url 'product_add_media' product_id=product.product.id %}" class="btn btn-danger btn-block">ADD MEDIA <i class="fas fa-chevron-right"></i></a>
             <a href="{% url 'product_edit_media' product_id=product.product.id %}" class="btn btn-success btn-block">EDIT MEDIA <i class="fas fa-chevron-right"></i></a>
@@ -80,13 +83,37 @@ Product List
         </div>
         </div>
     </article>
+
+    <!-- Quick View Modal -->
+    <div class="modal fade" id="productModal{{ product.product.id }}" tabindex="-1" role="dialog" aria-labelledby="productModalLabel{{ product.product.id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel{{ product.product.id }}">Product Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>ID:</strong> {{ product.product.id }}</p>
+                    <p><strong>Name:</strong> {{ product.product.product_name }}</p>
+                    <p><strong>Description:</strong> {{ product.product.product_description }}</p>
+                    <p><strong>Category:</strong> {{ product.product.subcategories_id.title }}</p>
+                    <p><strong>Status:</strong> {% if product.product.is_active == 1 %}Active{% else %}Inactive{% endif %}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endfor %}
 </div>
 <div class="row">
 <div class="col-lg-12">
 <div class="card">
-                 
+
                   <div class="card-body">
                     <nav aria-label="Page navigation example">
                       <ul class="pagination">
