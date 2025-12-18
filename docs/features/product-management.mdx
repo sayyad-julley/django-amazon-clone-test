@@ -1,0 +1,25 @@
+---
+title: 'Product Management'
+description: 'Overview of product management features in the Django E-commerce Application'
+---
+
+## Product Deletion
+
+### Confirmation Dialog
+
+A confirmation dialog has been added to the product deletion process to prevent accidental deletions. When a user clicks the "DELETE PRODUCT" button, a JavaScript `confirm()` dialog will appear with the message:
+
+```
+Are you sure you want to delete this product?
+```
+
+#### Behavior
+- If the user clicks "OK", the product deletion will proceed
+- If the user clicks "Cancel", the deletion will be cancelled
+
+### Best Practices
+- Always review products carefully before deletion
+- Confirm the necessity of deleting a product to prevent data loss
+- Use the confirmation dialog as a safety mechanism
+
+**Note:** Backend product deletion functionality is currently being implemented.
