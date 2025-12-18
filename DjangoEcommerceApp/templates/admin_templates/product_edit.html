@@ -25,8 +25,10 @@ Product EDIT
                 {% csrf_token %}
                 <div class="card-body">
                     <h5>Product Basic Details #{{ product.id }}
-                        <small class="text-muted ml-2">Created: {{ product.created_at|date:"Y-m-d H:i" }}</small>
-                        <small class="text-muted ml-2">Last Updated: {{ product.created_at|date:"Y-m-d H:i" }}</small>
+                        <small class="text-muted ml-2">Created: {{ product.created_at|date:"F d, Y H:i" }}</small>
+                        {% if product.updated_at %}
+                        <small class="text-muted ml-2">Last Modified: {{ product.updated_at|date:"F d, Y H:i" }}</small>
+                        {% endif %}
                     </h5>
                     <hr>
                     <div class="row"> 
