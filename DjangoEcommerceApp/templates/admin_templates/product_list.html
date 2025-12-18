@@ -67,6 +67,12 @@ Product List
             <div class="bulk-select-container">
                 <input type="checkbox" name="product_ids" value="{{ product.product.id }}" class="product-checkbox" form="bulk-action-form">
             </div>
+            <div class="product-id-container">
+                <span class="badge badge-info mr-2">ID: {{ product.product.id }}</span>
+                <button onclick="copyToClipboard('{{ product.product.id }}')" class="btn btn-sm btn-secondary" title="Copy Product ID">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+            </div>
             <label class="custom-switch mt-2" style="float:left">
                         <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" {% if product.product.is_active == 1 %}checked{% endif %}>
                         <span class="custom-switch-indicator"></span>
@@ -121,6 +127,15 @@ function toggleAllProducts(source) {
     for(var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = source.checked;
     }
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        alert('Product ID copied successfully!');
+    }, function(err) {
+        console.error('Unable to copy text: ', err);
+        alert('Failed to copy Product ID.');
+    });
 }
 </script>
 {% endblock custom_js %}
