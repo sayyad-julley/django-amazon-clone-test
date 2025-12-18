@@ -82,6 +82,7 @@ Merchant User List
                  
                   <div class="card-body">
                     <nav aria-label="Page navigation example">
+                      <p class="text-muted text-center">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
                       <ul class="pagination">
                         {% if page_obj.has_previous %}
                             <li class="page-item"><a class="page-link" href="{% url 'merchant_list' %}?filter={{ filter }}&orderby={{ orderby }}&page={{ page_obj.previous_page_number }}">Previous</a></li>

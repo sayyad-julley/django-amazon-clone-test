@@ -1,0 +1,31 @@
+# Pagination Information Display
+
+## Overview
+
+In version [current version], we added pagination information display to the following admin list pages:
+- Category List
+- Sub-Category List 
+- Product List
+- Merchant List
+
+## Implementation Details
+
+The pagination information is displayed using a centered text element showing the current page number and total number of pages:
+
+```html
+<p class="text-muted text-center">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+```
+
+### Pages Updated
+- `DjangoEcommerceApp/templates/admin_templates/category_list.html`
+- `DjangoEcommerceApp/templates/admin_templates/sub_category_list.html`
+- `DjangoEcommerceApp/templates/admin_templates/product_list.html`
+- `DjangoEcommerceApp/templates/admin_templates/merchant_list.html`
+
+## Usage
+
+The pagination information is automatically displayed for each of the mentioned list pages, providing users with context about their current position in the paginated results.
+
+## Improvements
+- Users can now quickly understand their current page position
+- Enhanced user experience with clear pagination context
