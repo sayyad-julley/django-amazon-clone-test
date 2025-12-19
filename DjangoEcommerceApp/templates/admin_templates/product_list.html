@@ -53,7 +53,9 @@ Product List
 <div class="col-12 col-sm-6 col-md-6 col-lg-3">
     <article class="article article-style-b">
         <div class="article-header">
-        <div class="article-image" data-background="{{ product.media.media_content }}" style="background-image: url(&quot;assets/img/news/img13.jpg&quot;);">
+        <div class="article-image" data-background="{{ product.media.media_content }}"
+             style="background-image: url(&quot;{{ product.media.media_content }}&quot;); cursor: pointer;"
+             onclick="openImageLightbox('{{ product.media.media_content }}', '{{ product.product.product_name }}')">
         </div>
         <div class="article-badge">
             <div class="article-badge-item bg-danger"><i class="fas fa-fire"></i>{{ product.product.product_name }}</div>
@@ -121,6 +123,32 @@ function toggleAllProducts(source) {
     for(var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = source.checked;
     }
+}
+
+// Add Lightbox Modal HTML
+document.body.insertAdjacentHTML('beforeend', `
+<div class="modal fade" id="imageLightbox" tabindex="-1" role="dialog" aria-labelledby="lightboxTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lightboxTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="lightboxImage" src="" alt="" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+`);
+
+// Lightbox JavaScript function
+function openImageLightbox(imageUrl, productName) {
+    document.getElementById('lightboxImage').src = imageUrl;
+    document.getElementById('lightboxTitle').textContent = productName;
+    $('#imageLightbox').modal('show');
 }
 </script>
 {% endblock custom_js %}
