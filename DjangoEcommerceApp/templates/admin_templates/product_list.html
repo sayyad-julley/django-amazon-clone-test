@@ -77,6 +77,7 @@ Product List
             <a href="{% url 'product_add_media' product_id=product.product.id %}" class="btn btn-danger btn-block">ADD MEDIA <i class="fas fa-chevron-right"></i></a>
             <a href="{% url 'product_edit_media' product_id=product.product.id %}" class="btn btn-success btn-block">EDIT MEDIA <i class="fas fa-chevron-right"></i></a>
             <a href="{% url 'product_add_stocks' product_id=product.product.id %}" class="btn btn-primary btn-block">ADD Stocks <i class="fas fa-chevron-right"></i></a>
+            <a href="#" class="btn btn-danger btn-block" onclick="confirmDelete({{ product.product.id }}, '{{ product.product.product_name }}')">DELETE <i class="fas fa-trash"></i></a>
         </div>
         </div>
     </article>
@@ -120,6 +121,30 @@ function toggleAllProducts(source) {
     var checkboxes = document.getElementsByClassName('product-checkbox');
     for(var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = source.checked;
+    }
+}
+
+function confirmDelete(productId, productName) {
+    if (confirm('Are you sure you want to delete "' + productName + '"? This action cannot be undone.')) {
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{% url "product_delete" %}';
+
+        var csrf = document.createElement('input');
+        csrf.type = 'hidden';
+        csrf.name = 'csrfmiddlewaretoken';
+        csrf.value = '{{ csrf_token }}';
+
+        var productIdInput = document.createElement('input');
+        productIdInput.type = 'hidden';
+        productIdInput.name = 'product_id';
+        productIdInput.value = productId;
+
+        form.appendChild(csrf);
+        form.appendChild(productIdInput);
+
+        document.body.appendChild(form);
+        form.submit();
     }
 }
 </script>

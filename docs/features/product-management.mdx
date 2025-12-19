@@ -1,0 +1,36 @@
+---
+title: 'Product Management Delete Functionality'
+description: 'Individual product deletion feature for admin interface'
+---
+
+## Product Deletion Feature
+
+### Overview
+The product deletion feature allows administrators to remove individual products directly from the product list interface.
+
+### Functionality
+- Each product card now includes a "DELETE" button
+- Clicking the button triggers a confirmation dialog
+- Confirmation dialog displays the product name
+- Prevents accidental deletions with explicit user consent
+- Uses POST method with CSRF protection for secure deletion
+
+### Usage
+1. Navigate to the Product List page
+2. Locate the product you want to delete
+3. Click the "DELETE" button on the product card
+4. Confirm deletion in the pop-up dialog
+
+### Technical Implementation
+- Implemented in `product_list.html`
+- JavaScript `confirmDelete()` function handles dialog and form submission
+- Submits deletion via dynamically created form with CSRF token
+
+### Security Considerations
+- CSRF token included with each delete request
+- Explicit user confirmation required
+- POST method prevents accidental or malicious deletions via URL manipulation
+
+### Compatibility
+- Works with existing bulk delete functionality
+- Maintains current admin interface design and UX
