@@ -63,6 +63,17 @@ Product List
         <p><span class="badge badge-primary">{{ product.product.subcategories_id.title }}</span></p>
         <p>{{ subcategory.description }}</p>
         <p><span class="badge badge-warning">Url Slug : {{ product.product.url_slug }}</span></p>
+
+        {% with qty=product.product.stock_quantity %}
+            {% if qty|default:0 > 10 %}
+                <span class="badge badge-success">In Stock ({{ qty }})</span>
+            {% elif qty|default:0 > 0 %}
+                <span class="badge badge-warning">Low Stock ({{ qty }})</span>
+            {% else %}
+                <span class="badge badge-danger">Out of Stock</span>
+            {% endif %}
+        {% endwith %}
+
         <div class="article-cta">
             <div class="bulk-select-container">
                 <input type="checkbox" name="product_ids" value="{{ product.product.id }}" class="product-checkbox" form="bulk-action-form">
