@@ -1,0 +1,30 @@
+# Admin Dashboard Refresh Button
+
+## Overview
+The admin dashboard now includes a "Refresh" button to allow users to manually reload the page data without using the browser's refresh functionality.
+
+## Implementation Details
+- Location: Admin Dashboard Home Page
+- Button Style: Bootstrap primary button
+- Icon: FontAwesome sync icon
+
+## Usage
+Click the "Refresh" button to reload the current page and fetch the latest dashboard data.
+
+### Example
+```html
+<a href="{% url 'admin_home' %}" class="btn btn-primary btn-sm">
+    <i class="fas fa-sync-alt"></i> Refresh
+</a>
+```
+
+## Technical Implementation
+- Utilizes existing `admin_home` view
+- No additional server-side logic required
+- Simple page reload mechanism
+
+## Acceptance Criteria
+- ✓ Button appears on admin home page
+- ✓ Button reloads the page
+- ✓ Button is clearly visible
+- ✓ No breaking changes to existing functionality

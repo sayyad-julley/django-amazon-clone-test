@@ -1,30 +1,15 @@
-{% extends 'admin_templates/base_template.html' %}
-<!-- BLOCK FOR TITLE -->
-{% block title %}
-Dashboard
-{% endblock title %}
-<!-- END BLOCK FOR TITLE -->
+{% extends "admin_templates/base_template.html" %}
 
-<!-- BLOCK FOR CUSTOM CSS -->
-{% block custom_css %}
-
-{% endblock custom_css %}
-<!-- END BLOCK FOR CUSTOM CSS -->
-
-<!-- BLOCK FOR PAGE TITLE -->
-{% block page_title %}
-Dashboard
-{% endblock page_title %}
-<!-- END BLOCK FOR PAGE TITLE -->
-
-<!-- BLOCK FOR PAGE MAIN CONTENT -->
 {% block page_content %}
-<p>Total Products: {{ total_products }}</p>
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="section-title">Dashboard</h1>
+            <a href="{{ request.path }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </a>
+        </div>
+        <p>Total Products: {{ total_products }}</p>
+    </div>
+</div>
 {% endblock page_content %}
-<!-- END BLOCK FOR PAGE MAIN CONTENT -->
-
-<!-- BLOCK FOR CUSTOM JS -->
-{% block custom_js %}
-
-{% endblock custom_js %}
-<!-- END BLOCK FOR CUSTOM JS -->
