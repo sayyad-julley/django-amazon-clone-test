@@ -1,0 +1,19 @@
+# Copy Product ID Feature
+
+## Overview
+A new feature has been added to the Product List page that allows users to quickly copy a product's ID to the clipboard.
+
+## Usage
+In the Product List table, each product ID now has a "Copy" button next to it. 
+- Click the button to copy the product ID 
+- A brief green "Copied!" message will appear to confirm the copy action
+
+## Implementation Details
+- Implemented in `product_list.html`
+- Uses vanilla JavaScript `document.execCommand('copy')` for clipboard interaction
+- Includes a temporary success message with 2-second visibility
+
+### Technical Notes
+- No backend changes required
+- Purely frontend feature
+- Supports all modern browsers
