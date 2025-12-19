@@ -1,0 +1,47 @@
+# Quick View Feature for Product List
+
+## Overview
+
+The Quick View feature allows administrators to quickly view detailed product information directly from the product list page using a modal popup.
+
+## Implementation Details
+
+### Button Placement
+- Added to each product card in the product list template
+- Located next to the "EDIT" button
+- Uses Bootstrap modal for displaying product details
+
+### Information Displayed
+The Quick View modal shows the following product details:
+- Product ID
+- Product Name
+- Product Description
+- Product Category
+- Product Status (Active/Inactive)
+
+## Usage
+
+1. Navigate to the Product List page
+2. Click the "Quick View" button with an eye icon next to a product
+3. A modal will pop up displaying the product's details
+4. Close the modal by clicking the "X" button or clicking outside the modal
+
+## Technical Implementation
+
+- Template File: `DjangoEcommerceApp/templates/admin_templates/product_list.html`
+- Uses Django template syntax for dynamic content rendering
+- Bootstrap modal for responsive, user-friendly interface
+- No additional backend changes required
+
+## Requirements
+
+- Bootstrap 4+ (for modal functionality)
+- Font Awesome (for icons)
+
+## Acceptance Criteria
+
+✓ "Quick View" button appears on each product card
+✓ Clicking button opens modal with product details
+✓ Modal displays all key product information
+✓ Modal can be closed via X button or clicking outside
+✓ No breaking changes to existing functionality

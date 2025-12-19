@@ -1,0 +1,34 @@
+# Product Management Features
+
+## Stock Status Badge
+
+### Overview
+Added a stock status badge to the product list template that displays the current stock quantity with color-coded indicators:
+
+- Green badge: In Stock (> 10 items)
+- Orange badge: Low Stock (1-10 items)
+- Red badge: Out of Stock (0 items)
+
+### Implementation Details
+- Located in: `DjangoEcommerceApp/templates/admin_templates/product_list.html`
+- Uses Django template tags to dynamically display stock status
+- Retrieves stock quantity from `product.product.stock_quantity`
+
+### Example
+```html
+{% with qty=product.product.stock_quantity %}
+    {% if qty|default:0 > 10 %}
+        <span class="badge badge-success">In Stock ({{ qty }})</span>
+    {% elif qty|default:0 > 0 %}
+        <span class="badge badge-warning">Low Stock ({{ qty }})</span>
+    {% else %}
+        <span class="badge badge-danger">Out of Stock</span>
+    {% endif %}
+{% endwith %}
+```
+
+### Acceptance Criteria
+- ✓ Stock badge appears on each product card
+- ✓ Badge color reflects stock level thresholds
+- ✓ Stock quantity is shown where relevant
+- ✓ No breaking changes to existing layout or functionality

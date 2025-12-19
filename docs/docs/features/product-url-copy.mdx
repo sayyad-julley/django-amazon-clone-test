@@ -1,0 +1,51 @@
+# Copy Product URL Feature
+
+## Overview
+
+Added a "Copy URL" button to the product list admin page that allows quick copying of the full product URL to the clipboard.
+
+## Implementation Details
+
+- Button added next to the URL slug display
+- Dynamically generates the full product URL using Django's `url` template tag
+- Supports modern browsers with Clipboard API 
+- Provides a fallback method for older browsers using `document.execCommand('copy')`
+- Shows an alert to confirm successful URL copy
+
+## Usage
+
+1. Navigate to the product list admin page
+2. Find the product you want to share
+3. Click the "Copy URL" button next to the product's URL slug
+4. The full product URL will be copied to your clipboard
+
+### Browser Compatibility
+
+- Modern browsers with Secure Context: Uses Clipboard API
+- Older browsers: Falls back to `document.execCommand('copy')`
+
+## Technical Implementation
+
+```python
+# In product_list.html template
+def copyProductUrl(url) {
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(function () {
+            alert('Product URL copied to clipboard');
+        });
+    } else {
+        # Fallback for older browsers
+        const tempInput = document.createElement('input');
+        tempInput.value = url;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        alert('Product URL copied to clipboard');
+    }
+}
+```
+
+## Related Files
+
+- `templates/admin_templates/product_list.html`

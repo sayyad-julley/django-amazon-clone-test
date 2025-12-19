@@ -1,0 +1,30 @@
+# Product Image Lightbox Functionality
+
+## Overview
+
+Added a lightbox feature to the product list view that allows administrators to click on product images to view them in a larger, centered modal.
+
+## Features
+
+- Product images are now clickable in the admin product list
+- Clicking an image opens a modal with the full-size image
+- Modal displays the product name as its title
+- Image is centered and responsive
+- Modal can be closed via the X button or clicking outside the modal
+
+## Implementation Details
+
+- Modified `product_list.html` template 
+- Added `onclick` event to product images
+- Inserted a modal dynamically using JavaScript
+- Implemented `openImageLightbox()` function to handle image display
+
+### Technical Changes
+
+- Added `cursor: pointer` style to images
+- Created a modal with Bootstrap classes
+- Used jQuery for modal triggering (ensures compatibility with existing admin theme)
+
+## Usage
+
+When viewing the product list in the admin panel, simply click on any product image to open the lightbox and view a larger version of the image.

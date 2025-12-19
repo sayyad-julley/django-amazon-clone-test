@@ -1,0 +1,9 @@
+django>=4.0
+Pillow>=9.0
+django-crispy-forms>=1.14.0
+crispy-bootstrap4>=2022.1
+django-countries>=7.2.1
+django-ckeditor>=6.5.1
+bcrypt>=4.0.0
+django-templated-mail>=1.1.1
+django-paypal>=2.0.0
