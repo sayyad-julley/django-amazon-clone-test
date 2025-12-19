@@ -1,0 +1,28 @@
+---
+title: Character Count for Product Description
+description: Implementation of character count indicator for product description fields
+---
+
+## Character Count Functionality
+
+### Overview
+The product creation and editing forms now include a character count indicator for description fields, helping users track their input against the maximum limit of 500 characters.
+
+### Features
+- Real-time character count display
+- Maximum limit of 500 characters for description fields
+- Automatic count update as user types
+
+### Implementation Details
+The character count is implemented using:
+- HTML `<small>` tag to display the count
+- JavaScript event listeners to track input
+- Dynamic span element to show current character count
+
+### Usage Example
+When creating or editing a product, you'll see a character count below the description textarea:
+```
+Character count: 0/500
+```
+
+As you type, the count will update in real-time to show the current number of characters.

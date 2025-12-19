@@ -1,24 +1,17 @@
 ---
-title: 'Product Management: View Details'
-description: 'Viewing Product Details in Admin Panel'
+title: Product List ID Column
+description: Adding Product ID column to product list view
 ---
 
-## Product List View Details
+## Product ID Column
 
-In the product list admin interface, each product row includes a "View" button that allows quick navigation to the product edit page.
+### Overview
+In the product list administration view, a new "ID" column has been added to provide easy reference to each product's unique identifier.
 
-### Features
-- Located in the "Actions" column of the product list table
-- Provides a direct link to edit the specific product
-- Uses Django's URL routing to navigate to the product edit page
+### Implementation Details
+- Location: `admin_templates/product_list.html`
+- Column Header: "ID"
+- Data Source: `{{ product.product.id }}`
 
 ### Usage
-Each product row has a "View" button that, when clicked, takes you to the edit page for that specific product.
-
-Example:
-```html
-<a href="{% url 'product_edit' product_id=product.product.id %}" class="btn btn-info btn-sm">View</a>
-```
-
-### Routing
-The link uses the `product_edit` URL name, passing the product's unique ID to load the correct product details.
+The ID column is automatically displayed in the product list table, providing administrators with quick access to each product's unique identifier.
