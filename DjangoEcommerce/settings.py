@@ -131,3 +131,5 @@ MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 STATIC_URL="/static/"
 STATIC_ROOT=os.path.join(BASE_DIR,"static")
 BASE_URL="http://127.0.0.1:8000"
+# Framework Injection: Fix models.W042 warnings
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

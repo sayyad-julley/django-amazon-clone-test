@@ -1,0 +1,1 @@
+DjangoEcommerceApp/templates/admin_templates/product_list.html

@@ -46,6 +46,9 @@ Product List <small>(Total: {{ object_list|length }})</small>
                     {% if request.GET.filter or status_filter or orderby %}
                         <span class="text-muted">(filtered)</span>
                     {% endif %}
+                    {% if object_list and page_obj.has_other_pages %}
+                        <span class="ml-2 text-info">(Multiple Pages)</span>
+                    {% endif %}
                 </p>
                 {% if page_obj %}
                     <p class="mb-0">

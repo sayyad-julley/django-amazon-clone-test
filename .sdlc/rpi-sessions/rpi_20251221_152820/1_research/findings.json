@@ -1,0 +1,26 @@
+[
+  {
+    "content": "title='Verify Existing Implementation' description='Conduct thorough testing of product list pagination and count display' priority=<Priority.P3: 'P3'> assignee=None due_date=None files=[]",
+    "source": "codebase_search",
+    "category": "codebase_search",
+    "relevance_score": 1.0
+  },
+  {
+    "content": "title='Optimize Product List Query' description='Refactor product list view to use select_related() or prefetch_related() for media retrieval' priority=<Priority.P1: 'P1'> assignee=None due_date=None files=[FileReference(path='DjangoEcommerceApp/AdminViews.py', line_start=None, line_end=None, snippet=None)]",
+    "source": "DjangoEcommerceApp/AdminViews.py",
+    "category": "pattern_analysis",
+    "relevance_score": 1.0
+  },
+  {
+    "content": "title='Enhance Pagination Flexibility' description='Consider making pagination items per page configurable' priority=<Priority.P2: 'P2'> assignee=None due_date=None files=[]",
+    "source": "pattern_analysis",
+    "category": "pattern_analysis",
+    "relevance_score": 1.0
+  },
+  {
+    "content": "title='Update Django Version' description='Consider upgrading Django to latest 4.x or 5.0 stable release' priority=<Priority.P2: 'P2'> assignee=None due_date=None files=[]",
+    "source": "dependency_check",
+    "category": "dependency_check",
+    "relevance_score": 1.0
+  }
+]

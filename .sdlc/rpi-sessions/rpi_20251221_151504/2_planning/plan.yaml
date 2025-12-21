@@ -1,0 +1,80 @@
+objective: "\nYou are a Senior Full-Stack Engineer. Complete the following SDLC workflow\
+  \ for Issue AGENTIC-157.\n\nCONTEXT:\n- Issue: Add product count and pagination\
+  \ info display to product list page\n- Description: **Repository:** django-amazon-clone-test\n\
+  \n**Changes Required:**\n\n**Template Update** (DjangoEcommerceApp/templates/admin_templates/product_list.html):\n\
+  \n* Display total product count at the top of the list\n* Show pagination info (e.g.,\
+  \ \"Showing 1-12 of 45 products\")\n* Display current page number and total pages\n\
+  * Update count dynamically based on active filters/search\n\n**Files to Modify:**\n\
+  \n* DjangoEcommerceApp/templates/admin_templates/product_list.html (5-10 lines)\n\
+  \n**Example Implementation:**\n\n*<!--\_Add\_product\_count\_display\_-->*\n\n<div\_\
+  class=\"row\_mb-3\">\n\n\_\_\_\_<div\_class=\"col-lg-12\">\n\n\_\_\_\_\_\_\_\_<div\_\
+  class=\"card\">\n\n\_\_\_\_\_\_\_\_\_\_\_\_<div\_class=\"card-body\">\n\n\_\_\_\_\
+  \_\_\_\_\_\_\_\_\_\_\_\_<p\_class=\"mb-0\">\n\n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\
+  \_\_\_<strong>Total\_Products:</strong>\_{{\_paginator.count\_}}\n\n\_\_\_\_\_\_\
+  \_\_\_\_\_\_\_\_\_\_\_\_\_\_{%\_if\_filter\_or\_status_filter\_%}\n\n\_\_\_\_\_\_\
+  \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_<span\_class=\"text-muted\">(filtered)</span>\n\
+  \n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{%\_endif\_%}\n\n\_\_\_\_\_\_\_\_\_\_\_\
+  \_\_\_\_\_</p>\n\n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{%\_if\_page_obj\_%}\n\n\_\_\_\
+  \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_<p\_class=\"mb-0\">\n\n\_\_\_\_\_\_\_\_\_\_\_\_\
+  \_\_\_\_\_\_\_\_\_\_\_\_Showing\_{{\_page_obj.start_index\_}}\_-\_{{\_page_obj.end_index\_\
+  }}\_of\_{{\_paginator.count\_}}\_products\n\n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\
+  \_\_\_\_\_\_{%\_if\_paginator.num_pages\_>\_1\_%}\n\n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\
+  \_\_\_\_\_\_\_\_\_\_\_\_\_\_(Page\_{{\_page_obj.number\_}}\_of\_{{\_paginator.num_pages\_\
+  }})\n\n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{%\_endif\_%}\n\n\_\_\_\_\
+  \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_</p>\n\n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{%\_endif\_\
+  %}\n\n\_\_\_\_\_\_\_\_\_\_\_\_</div>\n\n\_\_\_\_\_\_\_\_</div>\n\n\_\_\_\_</div>\n\
+  \n</div>\n\n**Acceptance Criteria:**\n\n\u2713 Total product count displays at the\
+  \ top of the list\n\n\u2713 Pagination info shows current range (e.g., \"Showing\
+  \ 1-12 of 45\")\n\n\u2713 Current page and total pages display when paginated\n\n\
+  \u2713 Count updates correctly when filters/search are applied\n\n\u2713 Shows \"\
+  (filtered)\" indicator when filters are active\n\n\u2713 No breaking changes to\
+  \ existing layout or functionality\n\n**Difficulty:** Very Easy\n\n**Estimated effort:**\
+  \ 10 minutes\n- Repo: django-amazon-clone-test (Branch: feature/agentic_157)\n-\
+  \ Working Directory: ./repos/django-amazon-clone-test\n\nREQUIRED WORKFLOW STEPS\
+  \ (Must be performed in order):\n\n1. **Research**:\n   - Analyze the codebase to\
+  \ understand the current implementation\n   - Identify necessary changes and potential\
+  \ impact\n   - Check for existing patterns or reusable components\n\n2. **Planning**:\n\
+  \   - Create a detailed implementation plan\n   - Outline specific files to modify\n\
+  \   - Define verification steps\n\n3. **Implementation**: \n   - Modify the code\
+  \ to resolve the issue\n   - Follow best practices and project conventions\n   -\
+  \ Ensure code is production-ready\n\n4. **Verification**:\n   - Run 'python3.11\
+  \ manage.py test' to ensure tests pass\n   - If using 'mvn test', 'pytest', 'npm\
+  \ test', or other runners, verify output manually\n   - Fix any failing tests before\
+  \ proceeding\n   - Verify code quality and style\n\n5. **Documentation**:\n   -\
+  \ Use 'manage_mintlify_docs' tool to update/create documentation\n   - Document\
+  \ the changes made\n   - Include usage examples if applicable\n   - File path should\
+  \ be relative to docs/ (e.g., 'api/endpoints.mdx')\n\n6. **QA Reporting**:\n   -\
+  \ Use 'mcp__sdlc-tools__report_execution' tool to report test results to Kualitee\n\
+  \   - Include test results and evidence\n   - Status: 'Passed' if tests pass, 'Failed'\
+  \ if they don't\n   - Issue ID: AGENTIC-157\n   - Project ID: Get from 'mcp__sdlc-tools__get_project_context'\
+  \ if needed\n\n7. **Delivery**: \n   - Commit changes (use git commit with descriptive\
+  \ message)\n   - Push branch to remote (git push origin feature/agentic_157)\n \
+  \  - Use 'open_github_pr' tool to submit your work\n   - PR title should reference\
+  \ the issue: \"AGENTIC-157: Add product count and pagination info display to product\
+  \ list page\"\n   - PR body should include issue description and summary of changes\n\
+  \nCRITICAL REQUIREMENTS:\n- Implementation must ONLY occur after Research and Planning\
+  \ are complete\n- Do not skip Documentation step\n- Do not skip QA Reporting step\n\
+  - Do not skip PR creation step\n- If tests fail, fix them before proceeding\n- All\
+  \ steps must be completed for the workflow to be considered successful\n\nSUCCESS\
+  \ CRITERIA:\n- Research and Planning completed\n- Code changes implemented and tested\n\
+  - Documentation updated\n- QA results reported\n- Pull Request created\n"
+steps:
+- id: step_1
+  description: Update DjangoEcommerceApp/templates/admin_templates/product_list.html
+  target_file: DjangoEcommerceApp/templates/admin_templates/product_list.html
+  action: modify
+  details: title='Enhance Product Count Display' description=; title='Enhance Pagination
+    Context' description='Ad
+  test_command: make test
+- id: step_2
+  description: Update Priority.P2
+  target_file: Priority.P2
+  action: modify
+  details: title='Verify Pagination Context' description='Con
+  test_command: make test
+target_files:
+- DjangoEcommerceApp/templates/admin_templates/product_list.html
+- Priority.P2
+test_commands:
+- python3.11 manage.py test
+constraints: []

@@ -1,0 +1,2 @@
+DjangoEcommerceApp/templates/admin_templates/product_list.html
+Priority.P2

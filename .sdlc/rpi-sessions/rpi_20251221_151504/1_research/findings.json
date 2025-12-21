@@ -1,0 +1,20 @@
+[
+  {
+    "content": "title='Enhance Product Count Display' description='Modify template to show detailed product count, pagination info, and filtered status' priority=<Priority.P2: 'P2'> assignee=None due_date=None files=[FileReference(path='DjangoEcommerceApp/templates/admin_templates/product_list.html', line_start=None, line_end=None, snippet=None)]",
+    "source": "DjangoEcommerceApp/templates/admin_templates/product_list.html",
+    "category": "codebase_search",
+    "relevance_score": 1.0
+  },
+  {
+    "content": "title='Enhance Pagination Context' description='Add more contextual information to pagination display, including total filtered count' priority=<Priority.P2: 'P2'> assignee=None due_date=None files=[FileReference(path='DjangoEcommerceApp/templates/admin_templates/product_list.html', line_start=None, line_end=None, snippet=None), FileReference(path='DjangoEcommerceApp/AdminViews.py', line_start=None, line_end=None, snippet=None)]",
+    "source": "DjangoEcommerceApp/templates/admin_templates/product_list.html",
+    "category": "pattern_analysis",
+    "relevance_score": 1.0
+  },
+  {
+    "content": "title='Verify Pagination Context' description='Confirm correct implementation of pagination context variables in view and template' priority=<Priority.P2: 'P2'> assignee=None due_date=None files=[FileReference(path='product_list.html', line_start=None, line_end=None, snippet=None), FileReference(path='views.py', line_start=None, line_end=None, snippet=None)]",
+    "source": "dependency_check",
+    "category": "dependency_check",
+    "relevance_score": 1.0
+  }
+]
