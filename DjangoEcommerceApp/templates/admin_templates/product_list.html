@@ -49,9 +49,13 @@ Product List <small>(Total: {{ object_list|length }})</small>
                 </p>
                 {% if page_obj %}
                     <p class="mb-0">
-                        Showing {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }} products
-                        {% if paginator.num_pages > 1 %}
-                            (Page {{ page_obj.number }} of {{ paginator.num_pages }})
+                        {% if object_list %}
+                            Showing {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }} products
+                            {% if paginator.num_pages > 1 %}
+                                (Page {{ page_obj.number }} of {{ paginator.num_pages }})
+                            {% endif %}
+                        {% else %}
+                            No products found
                         {% endif %}
                     </p>
                 {% endif %}

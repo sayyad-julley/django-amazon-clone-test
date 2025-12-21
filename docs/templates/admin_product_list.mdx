@@ -1,0 +1,26 @@
+# Product List Template
+
+## Overview
+The product list template provides a comprehensive view of products in the admin dashboard.
+
+## Features
+- Total product count display
+- Pagination information
+- Filtered status indicator
+- Responsive design
+
+### Template Variables
+- `paginator.count`: Total number of products
+- `page_obj.start_index`: First item index on current page
+- `page_obj.end_index`: Last item index on current page
+- `page_obj.number`: Current page number
+- `paginator.num_pages`: Total number of pages
+
+## Filtering
+Products can be filtered using the search input, which dynamically updates:
+- Product count
+- Displayed results
+- Pagination information
+
+### Filtered Status
+When filters are applied, a `(filtered)` indicator is shown next to the total product count.
