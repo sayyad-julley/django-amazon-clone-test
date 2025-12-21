@@ -43,7 +43,7 @@ Product List <small>(Total: {{ object_list|length }})</small>
             <div class="card-body">
                 <p class="mb-0">
                     <strong>Total Products:</strong> {{ paginator.count }}
-                    {% if filter or orderby %}
+                    {% if request.GET.filter or status_filter or orderby %}
                         <span class="text-muted">(filtered)</span>
                     {% endif %}
                 </p>
