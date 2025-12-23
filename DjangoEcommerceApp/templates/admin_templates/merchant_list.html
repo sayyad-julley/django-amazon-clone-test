@@ -35,11 +35,10 @@ Merchant User List
                   
             <div class="card-body">
                 <b>Sort By : - </b>
-                <a href="{% url 'merchant_list' %}?filter={{ filter }}&orderby=id">ID</a>  | 
-                <a href="{% url 'merchant_list' %}?filter={{ filter }}&orderby=created_at">Newest</a> |  
-                <a href="{% url 'merchant_list' %}?filter={{ filter }}&orderby=company_name">Company</a> |
-                <a href="{% url 'merchant_list' %}?filter={{ filter }}&orderby=created_at">Newest</a> |
-                <a href="{% url 'merchant_list' %}?filter={{ filter }}&orderby=auth_user_id__username">Username</a> |
+                <a href="{% url 'merchant_list' %}?filter={{ filter }}&orderby=id" class="{% if orderby == 'id' %}active-sort{% endif %}">ID</a>  |
+                <a href="{% url 'merchant_list' %}?filter={{ filter }}&orderby=created_at" class="{% if orderby == 'created_at' %}active-sort{% endif %}">Newest</a> |
+                <a href="{% url 'merchant_list' %}?filter={{ filter }}&orderby=company_name" class="{% if orderby == 'company_name' %}active-sort{% endif %}">Company</a> |
+                <a href="{% url 'merchant_list' %}?filter={{ filter }}&orderby=auth_user_id__username" class="{% if orderby == 'auth_user_id__username' %}active-sort{% endif %}">Username</a> |
             </div>
         </div>
         </div>
