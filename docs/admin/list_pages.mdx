@@ -1,0 +1,19 @@
+## List Page Sort Options
+
+All admin list pages (Category, Sub-Category, Product, Merchant) already have active sort option highlighting implemented.
+
+### Implementation Details
+- Existing `orderby` query parameter is used to determine active sort
+- `.active-sort` CSS class is applied to currently selected sort option
+- CSS styling includes:
+  - Bold font weight
+  - Underline
+  - Blue color (#007bff)
+
+### Supported Pages
+- Category List
+- Sub-Category List
+- Product List
+- Merchant List
+
+No additional changes were required to implement AGENTIC-159.
