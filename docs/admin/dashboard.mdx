@@ -1,0 +1,17 @@
+---
+title: Admin Dashboard Refresh Button
+description: Documentation for the admin dashboard home page refresh functionality
+---
+
+## Refresh Button
+
+### Overview
+A refresh button has been added to the admin dashboard home page to allow manual page reloading.
+
+### Usage
+Click the "Refresh" button located at the top right of the dashboard to reload the current page.
+
+### Technical Details
+- Button uses Django URL routing with `{% url 'admin_home' %}`
+- Styled with Bootstrap classes: `btn btn-primary btn-sm`
+- Includes a Font Awesome sync icon for visual indication
