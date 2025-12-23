@@ -1,0 +1,2 @@
+DjangoEcommerceApp/templates/admin_templates/home.html
+requirements.txt
