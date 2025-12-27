@@ -1,0 +1,9 @@
+language: "en-US"
+reviews:
+  profile: "chill"
+  high_level_summary: true
+  auto_review:
+    enabled: true
+    triggers:
+      - "pr_created"
+      - "commit_pushed"
