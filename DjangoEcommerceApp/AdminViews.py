@@ -264,25 +264,39 @@ class ProductListView(ListView):
     paginate_by=3
 
     def get_queryset(self):
-        filter_val=self.request.GET.get("filter","")
-        order_by=self.request.GET.get("orderby","id")
-        if filter_val!="":
-            products=Products.objects.filter(Q(product_name__contains=filter_val) | Q(product_description__contains=filter_val)).order_by(order_by)
-        else:
-            products=Products.objects.all().order_by(order_by)
-        
-        product_list=[]
+        filter_val = self.request.GET.get("filter","")
+        order_by = self.request.GET.get("orderby","id")
+        brand_val = self.request.GET.get("brand","")
+
+        # Start with base queryset
+        products = Products.objects.all()
+
+        # Apply text filter if present
+        if filter_val:
+            products = products.filter(Q(product_name__contains=filter_val) | Q(product_description__contains=filter_val))
+
+        # Apply brand filter if present
+        if brand_val:
+            products = products.filter(brand=brand_val)
+
+        # Order the queryset
+        products = products.order_by(order_by)
+
+        # Prepare product list with media
+        product_list = []
         for product in products:
-            product_media=ProductMedia.objects.filter(product_id=product.id,media_type=1,is_active=1).first()
+            product_media = ProductMedia.objects.filter(product_id=product.id,media_type=1,is_active=1).first()
             product_list.append({"product":product,"media":product_media})
 
         return product_list
 
     def get_context_data(self,**kwargs):
-        context=super(ProductListView,self).get_context_data(**kwargs)
-        context["filter"]=self.request.GET.get("filter","")
-        context["orderby"]=self.request.GET.get("orderby","id")
-        context["all_table_fields"]=Products._meta.get_fields()
+        context = super(ProductListView,self).get_context_data(**kwargs)
+        context["filter"] = self.request.GET.get("filter","")
+        context["orderby"] = self.request.GET.get("orderby","id")
+        context["brand"] = self.request.GET.get("brand","")
+        context["brands"] = Products.objects.values_list('brand', flat=True).distinct().order_by('brand')
+        context["all_table_fields"] = Products._meta.get_fields()
         return context
 
 

@@ -1,0 +1,31 @@
+# Brand Filter for Product List
+
+## Overview
+A brand filter dropdown has been added to the product list page, allowing users to filter products by brand name.
+
+## Implementation Details
+- Added brand filter dropdown in the product list page
+- Implemented server-side filtering in `ProductListView`
+- Preserved existing search and sorting functionality
+
+### Features
+- Select a specific brand to view only products from that brand
+- "All Brands" option to reset the filter
+- Filter persists across pagination and sorting
+
+### Usage
+1. Navigate to the product list page
+2. Use the brand dropdown to select a specific brand
+3. Click "Search" or select a sorting option
+
+### Technical Implementation
+- Updated `AdminViews.py`:
+  - Added brand filter to `get_queryset()`
+  - Extended `get_context_data()` to include unique brands
+- Modified `product_list.html` to include brand dropdown
+- Maintained existing filtering and pagination logic
+
+## Compatibility
+- Works with existing search functionality
+- Supports pagination
+- Preserves all existing product list features

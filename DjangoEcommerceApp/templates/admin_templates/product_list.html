@@ -19,6 +19,12 @@ Product List
                   <div class="card-body">
                   <form method="get">
                     <button class="btn btn-primary" type="submit" style="float:right"><i class="fas fa-search"></i> Search</button>
+                    <select class="form-control" name="brand" style="width: 200px;float:right;margin-right:10px;">
+                        <option value="">All Brands</option>
+                        {% for brand in brands %}
+                            <option value="{{ brand }}" {% if brand == request.GET.brand %}selected{% endif %}>{{ brand }}</option>
+                        {% endfor %}
+                    </select>
                     <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="250" style="width: 250px;float:right" name="filter" value="{{ filter }}">
                    </form>
                   </div>
@@ -32,9 +38,9 @@ Product List
         <div class="card">
             <div class="card-body">
                 <b>Sort By : - </b>
-                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=id">ID</a>  |
-                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=product_name">Title</a> |
-                <a href="{% url 'product_list' %}?filter={{ filter }}&orderby=product_description">Description</a>
+                <a href="{% url 'product_list' %}?filter={{ filter }}&brand={{ brand }}&orderby=id">ID</a>  |
+                <a href="{% url 'product_list' %}?filter={{ filter }}&brand={{ brand }}&orderby=product_name">Title</a> |
+                <a href="{% url 'product_list' %}?filter={{ filter }}&brand={{ brand }}&orderby=product_description">Description</a>
                 <form id="bulk-action-form" method="post" action="{% url 'product_bulk_action' %}">
                     {% csrf_token %}
                     <div class="bulk-actions mt-2">
@@ -91,15 +97,15 @@ Product List
                     <nav aria-label="Page navigation example">
                       <ul class="pagination">
                         {% if page_obj.has_previous %}
-                            <li class="page-item"><a class="page-link" href="{% url 'product_list' %}?filter={{ filter }}&orderby={{ orderby }}&page={{ page_obj.previous_page_number }}">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="{% url 'product_list' %}?filter={{ filter }}&brand={{ brand }}&orderby={{ orderby }}&page={{ page_obj.previous_page_number }}">Previous</a></li>
                         {% else %}
                             <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
                         {% endif %}
                         {% for i in paginator.page_range %}
-                                <li class="page-item {% if i == page_obj.number %}active{% endif %}"><a class="page-link" href="{% url 'product_list' %}?filter={{ filter }}&orderby={{ orderby }}&page={{ i }}">{{ i }}</a></li>
+                                <li class="page-item {% if i == page_obj.number %}active{% endif %}"><a class="page-link" href="{% url 'product_list' %}?filter={{ filter }}&brand={{ brand }}&orderby={{ orderby }}&page={{ i }}">{{ i }}</a></li>
                         {% endfor %}
                         {% if page_obj.has_next %}
-                            <li class="page-item"><a class="page-link" href="{% url 'product_list' %}?filter={{ filter }}&orderby={{ orderby }}&page={{ page_obj.next_page_number }}">Next</a></li>
+                            <li class="page-item"><a class="page-link" href="{% url 'product_list' %}?filter={{ filter }}&brand={{ brand }}&orderby={{ orderby }}&page={{ page_obj.next_page_number }}">Next</a></li>
                         {% else %}
                             <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
                         {% endif %}
