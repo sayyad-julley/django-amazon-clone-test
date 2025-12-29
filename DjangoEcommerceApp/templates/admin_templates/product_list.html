@@ -59,10 +59,13 @@ Product List
             <div class="article-badge-item bg-danger"><i class="fas fa-fire"></i>{{ product.product.product_name }}</div>
         </div>
         </div>
-        <div class="article-details">
+        <div class="article-details {% if not product.product.in_stock %}bg-secondary text-white{% endif %}">
         <p><span class="badge badge-primary">{{ product.product.subcategories_id.title }}</span></p>
         <p>{{ subcategory.description }}</p>
         <p><span class="badge badge-warning">Url Slug : {{ product.product.url_slug }}</span></p>
+        {% if not product.product.in_stock %}
+            <p><span class="badge badge-danger">Out of Stock</span></p>
+        {% endif %}
         <div class="article-cta">
             <div class="bulk-select-container">
                 <input type="checkbox" name="product_ids" value="{{ product.product.id }}" class="product-checkbox" form="bulk-action-form">
