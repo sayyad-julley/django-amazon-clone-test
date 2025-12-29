@@ -8,5 +8,6 @@ admin.site.register(SubCategories)
 @admin.register(Products)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['product_name', 'brand', 'in_stock']
+    list_filter = ['in_stock']
     list_editable = ['in_stock']
     search_fields = ['product_name', 'brand']
