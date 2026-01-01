@@ -1,0 +1,12 @@
+{% if product %}
+    <div class="product-detail {% if not product.in_stock %}out-of-stock{% endif %}">
+        <h1>{{ product.product_name }}</h1>
+
+        {% if not product.in_stock %}
+            <div class="out-of-stock-label">Out of Stock</div>
+            <p>Sorry, this product is currently unavailable.</p>
+        {% else %}
+            <button class="add-to-cart-btn">Add to Cart</button>
+        {% endif %}
+    </div>
+{% endif %}

@@ -1,0 +1,9 @@
+{% for product in products %}
+    <div class="product-card {% if not product.in_stock %}out-of-stock{% endif %}">
+        <h3>{{ product.product_name }}</h3>
+        {% if not product.in_stock %}
+            <div class="out-of-stock-label">Out of Stock</div>
+        {% endif %}
+        <!-- Rest of product details -->
+    </div>
+{% endfor %}

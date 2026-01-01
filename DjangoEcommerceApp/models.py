@@ -85,6 +85,7 @@ class Products(models.Model):
     in_stock_total=models.IntegerField(default=1)
     in_stock=models.BooleanField(default=True)
     is_active=models.IntegerField(default=1)
+    in_stock=models.BooleanField(default=True)
 
 class ProductMedia(models.Model):
     id=models.AutoField(primary_key=True)
