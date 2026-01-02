@@ -1,0 +1,23 @@
+---
+title: 'Bulk Product Actions'
+description: 'Add bulk selection and action capabilities to the product list page'
+---
+
+## Bulk Product Selection
+
+The product list page now supports bulk selection of products with a new "Select All" checkbox feature.
+
+### Features
+- "Select All" checkbox in the table header
+- Individual checkboxes for each product
+- Supports bulk actions like deletion
+
+### Usage
+1. Click the "Select All" checkbox to select/deselect all products
+2. Alternatively, select individual products as needed
+3. Use the "Bulk Delete" button to perform actions on selected products
+
+### Technical Implementation
+- Added JavaScript function `toggleAllProducts()` to handle checkbox selection
+- Implemented form with CSRF token for secure bulk actions
+- Uses Django's form submission to handle bulk operations
