@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="product-detail">
+    <h1>{{ product.product_name }}</h1>
+
+    {% if not product.in_stock %}
+    <div class="out-of-stock-badge text-danger">
+        Out of Stock
+    </div>
+    {% endif %}
+
+    <div class="product-description">
+        {{ product.product_description }}
+    </div>
+
+    <div class="product-price">
+        <p>Price: {{ product.product_discount_price }}</p>
+    </div>
+
+    {% if product.in_stock %}
+    <form method="post" action="{% url 'add_to_cart' product.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Add to Cart</button>
+    </form>
+    {% else %}
+    <button class="btn btn-secondary" disabled>Temporarily Unavailable</button>
+    {% endif %}
+</div>
+{% endblock %}

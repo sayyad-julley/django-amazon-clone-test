@@ -83,6 +83,7 @@ class Products(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     added_by_merchant=models.ForeignKey(MerchantUser,on_delete=models.CASCADE)
     in_stock_total=models.IntegerField(default=1)
+    in_stock=models.BooleanField(default=True)
     is_active=models.IntegerField(default=1)
 
 class ProductMedia(models.Model):
