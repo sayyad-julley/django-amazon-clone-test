@@ -84,6 +84,66 @@ class Products(models.Model):
     added_by_merchant=models.ForeignKey(MerchantUser,on_delete=models.CASCADE)
     in_stock_total=models.IntegerField(default=1)
     is_active=models.IntegerField(default=1)
+    is_in_stock=models.BooleanField(default=True)
+
+    def validate_stock(self, quantity):
+        return self.is_in_stock and self.in_stock_total >= quantity
+
+class Cart(models.Model):
+    customer = models.ForeignKey(CustomerUser, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def remove_out_of_stock_items(self):
+        # Remove all cart items that are out of stock
+        out_of_stock_items = [item for item in self.items.all() if not item.is_valid()]
+        for item in out_of_stock_items:
+            item.delete()
+        return out_of_stock_items
+
+    def validate_cart_items(self):
+        # Check if any items are out of stock
+        return all(item.is_valid() for item in self.items.all())
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    is_quantity_updatable = models.BooleanField(default=True, help_text="Whether the quantity can be updated")
+
+    def is_valid(self):
+        # Check if product is in stock and has sufficient quantity
+        valid_stock = self.product.validate_stock(self.quantity)
+
+        # Update quantity updatability based on stock
+        if valid_stock != self.is_quantity_updatable:
+            self.is_quantity_updatable = valid_stock
+            self.save(update_fields=['is_quantity_updatable'])
+
+        return valid_stock
+
+    def save(self, *args, **kwargs):
+        # Flag to track if this is a new instance
+        is_new_instance = self.pk is None
+
+        # Prevent updating quantity for out-of-stock products
+        if not self.product.is_in_stock:
+            self.is_quantity_updatable = False
+            self.quantity = 0
+
+        # If this is a new instance, remove update_fields to allow full save
+        if is_new_instance and 'update_fields' in kwargs:
+            del kwargs['update_fields']
+
+        # Ensure is_quantity_updatable and quantity are tracked for updates
+        if not is_new_instance:
+            update_fields = kwargs.get('update_fields', [])
+            if 'is_quantity_updatable' not in update_fields:
+                update_fields.append('is_quantity_updatable')
+            if 'quantity' not in update_fields:
+                update_fields.append('quantity')
+            kwargs['update_fields'] = list(set(update_fields))
+
+        super().save(*args, **kwargs)
 
 class ProductMedia(models.Model):
     id=models.AutoField(primary_key=True)
