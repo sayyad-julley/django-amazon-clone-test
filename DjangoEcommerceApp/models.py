@@ -83,6 +83,7 @@ class Products(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     added_by_merchant=models.ForeignKey(MerchantUser,on_delete=models.CASCADE)
     in_stock_total=models.IntegerField(default=1)
+    in_stock=models.BooleanField(default=True)
     is_active=models.IntegerField(default=1)
 
 class ProductMedia(models.Model):
@@ -171,7 +172,59 @@ class CustomerOrders(models.Model):
     coupon_code=models.CharField(max_length=255)
     discount_amt=models.CharField(max_length=255)
     product_status=models.CharField(max_length=255)
+    is_in_stock=models.BooleanField(default=True)
     created_at=models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        self.is_in_stock = self.product_id.in_stock
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def create_order_from_cart(cls, cart):
+        # Validate that all items in cart are in stock before creating order
+        for item in cart.cartitem_set.all():
+            if not item.is_in_stock():
+                raise ValueError(f"Product {item.product.product_name} is out of stock")
+
+        # Create order logic here (simplified for example)
+        order = cls()
+        # Additional order creation logic would go here
+        return order
+
+class Cart(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def add_to_cart(self, product, quantity):
+        if not product.in_stock or quantity > product.in_stock_total:
+            raise ValueError("Product is out of stock or quantity exceeds available stock")
+
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=self,
+            product=product,
+            defaults={'quantity': quantity}
+        )
+
+        if not created:
+            cart_item.quantity += quantity
+            cart_item.save()
+
+    def update_cart_item_quantity(self, product, quantity):
+        cart_item = CartItem.objects.get(cart=self, product=product)
+
+        if quantity > product.in_stock_total:
+            raise ValueError("Quantity exceeds available stock")
+
+        cart_item.quantity = quantity
+        cart_item.save()
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def is_in_stock(self):
+        return self.product.in_stock and self.quantity <= self.product.in_stock_total
 
 class OrderDeliveryStatus(models.Model):
     id=models.AutoField(primary_key=True)
