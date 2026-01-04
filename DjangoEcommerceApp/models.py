@@ -86,6 +86,19 @@ class Products(models.Model):
     in_stock=models.BooleanField(default=True)
     is_active=models.IntegerField(default=1)
 
+    @property
+    def in_stock(self):
+        """Check if the product is currently in stock."""
+        return self.in_stock_total > 0
+
+    def update_stock(self, quantity_change):
+        """
+        Update stock quantity.
+        Use negative values to decrease stock when items are sold.
+        """
+        self.in_stock_total += quantity_change
+        self.save()
+
 class ProductMedia(models.Model):
     id=models.AutoField(primary_key=True)
     product_id=models.ForeignKey(Products,on_delete=models.CASCADE)
@@ -257,3 +270,20 @@ def save_user_profile(sender,instance,**kwargs):
         instance.merchantuser.save()
     if instance.user_type==4:
         instance.customeruser.save()
+
+class Cart(models.Model):
+    id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(CustomerUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def is_product_in_stock(self):
+        """Check if the product in the cart is currently in stock."""
+        return self.product.in_stock
+
+    @property
+    def is_quantity_available(self):
+        """Check if the cart quantity is less than or equal to available stock."""
+        return self.product.in_stock_total >= self.quantity

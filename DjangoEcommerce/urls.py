@@ -23,5 +23,9 @@ from django.urls import include
 from DjangoEcommerce import settings
 
 urlpatterns = [
-    path('admindashboard/',include("DjangoEcommerceApp.adminurls"))
-]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+    path('admindashboard/', include("DjangoEcommerceApp.adminurls")),
+    path('add_to_cart/<int:product_id>', views.add_to_cart, name='add_to_cart'),
+    path('cart/', views.cart_view, name='cart_view'),
+    path('remove_from_cart/<int:cart_item_id>', views.remove_from_cart, name='remove_from_cart'),
+    path('update_cart_quantity/<int:cart_item_id>', views.update_cart_quantity, name='update_cart_quantity')
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
