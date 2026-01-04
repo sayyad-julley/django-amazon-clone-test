@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class='cart-container'>
+    <h2>Your Cart</h2>
+
+    {% if cart_items %}
+        <table class='cart-table'>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Stock Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                    <tr class='{% if not item.product_id.in_stock %}out-of-stock{% endif %}'>
+                        <td>{{ item.product_id.product_name }}</td>
+                        <td>{{ item.product_id.product_discount_price }}</td>
+                        <td>
+                            {% if item.product_id.in_stock %}
+                                <span class='in-stock'>In Stock</span>
+                            {% else %}
+                                <span class='out-of-stock'>Out of Stock</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button {% if not item.product_id.in_stock %}disabled{% endif %}>
+                                {% if item.product_id.in_stock %}Remove{% else %}Remove Out of Stock Item{% endif %}
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class='cart-summary'>
+            <button
+                id='checkout-btn'
+                {% if not is_cart_in_stock %}disabled{% endif %}
+            >
+                Proceed to Checkout
+            </button>
+        </div>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+</div>
+
+<style>
+    .out-of-stock {
+        opacity: 0.5;
+    }
+    .out-of-stock .out-of-stock {
+        color: red;
+    }
+    button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}
