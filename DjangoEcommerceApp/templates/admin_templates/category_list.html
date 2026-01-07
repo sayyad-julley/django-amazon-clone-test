@@ -35,9 +35,9 @@ Category List
                   
             <div class="card-body">
                 <b>Sort By : - </b>
-                <a href="{% url 'category_list' %}?filter={{ filter }}&orderby=id">ID</a>  | 
-                <a href="{% url 'category_list' %}?filter={{ filter }}&orderby=title">Title</a> |  
-                <a href="{% url 'category_list' %}?filter={{ filter }}&orderby=description">Description</a> 
+                <a href="{% url 'category_list' %}?filter={{ filter }}&orderby=id" class="{% if orderby == 'id' %}active-sort{% endif %}">ID</a>  |
+                <a href="{% url 'category_list' %}?filter={{ filter }}&orderby=title" class="{% if orderby == 'title' %}active-sort{% endif %}">Title</a> |
+                <a href="{% url 'category_list' %}?filter={{ filter }}&orderby=description" class="{% if orderby == 'description' %}active-sort{% endif %}">Description</a>
             </div>
         </div>
         </div>
