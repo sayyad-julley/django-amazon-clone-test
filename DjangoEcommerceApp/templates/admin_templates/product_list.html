@@ -62,7 +62,16 @@ Product List
         <div class="article-details">
         <p><span class="badge badge-primary">{{ product.product.subcategories_id.title }}</span></p>
         <p>{{ subcategory.description }}</p>
-        <p><span class="badge badge-warning">Url Slug : {{ product.product.url_slug }}</span></p>
+        <p>
+            <span class="badge badge-warning">Url Slug : {{ product.product.url_slug }}</span>
+            <button
+                type="button"
+                class="btn btn-sm btn-secondary ml-2"
+                onclick="copyProductUrl('{{ request.scheme }}://{{ request.get_host }}{% url 'product_detail' slug=product.product.url_slug %}')"
+            >
+                Copy URL
+            </button>
+        </p>
         <div class="article-cta">
             <div class="bulk-select-container">
                 <input type="checkbox" name="product_ids" value="{{ product.product.id }}" class="product-checkbox" form="bulk-action-form">
@@ -120,6 +129,22 @@ function toggleAllProducts(source) {
     var checkboxes = document.getElementsByClassName('product-checkbox');
     for(var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = source.checked;
+    }
+}
+
+function copyProductUrl(url) {
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(function () {
+            alert('Product URL copied to clipboard');
+        });
+    } else {
+        const tempInput = document.createElement('input');
+        tempInput.value = url;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        alert('Product URL copied to clipboard');
     }
 }
 </script>
