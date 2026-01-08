@@ -66,3 +66,4 @@
 
 ## Added Product Add Stock Page
 <img src="screenshots/product_add_stock.png" style="width:100%" alt="Products"/>
+# Checkpoint commit for PR
